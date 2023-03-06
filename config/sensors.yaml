@@ -1,0 +1,7 @@
+sensors:
+  breakbeam_0:
+    type: break_beam
+    visualize_fov: true
+    pose:
+      xyz: [-0.36, 3.5, 0.88]
+      rpy: [0, 0, pi]
