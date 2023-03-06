@@ -10,7 +10,7 @@ from ariac_moveit_config.parameters import generate_parameters
 def generate_launch_description():
     # Robot Commander Node
     robot_commander = Node(
-        package="competition_tutorials",
+        package="ariac_tutorials",
         executable="robot_commander",
         output="screen",
         parameters=generate_parameters()
