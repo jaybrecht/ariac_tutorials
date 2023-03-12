@@ -1,0 +1,2143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ariac_tutorials.competition_interface API documentation</title>
+<meta name="description" content="Module used in tutorials." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ariac_tutorials.competition_interface</code></h1>
+</header>
+<section id="section-intro">
+<p>Module used in tutorials.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">#!/usr/bin/env python3
+&#39;&#39;&#39;
+Module used in tutorials.
+&#39;&#39;&#39;
+
+
+import rclpy
+import PyKDL
+import tf2_kdl
+from dataclasses import dataclass
+from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
+from rclpy.time import Duration
+from rclpy.parameter import Parameter
+from geometry_msgs.msg import Pose
+
+from ariac_msgs.msg import (
+    CompetitionState,
+    BreakBeamStatus,
+    Order as OrderMsg,
+    Part,
+    KittingPart as KittingPartMsg,
+    AssemblyPart as AssemblyPartMsg,
+    AGVStatus,
+    VacuumGripperState,
+    AssemblyTask as AssemblyTaskMsg,
+    KittingTask as KittingTaskMsg,
+    CombinedTask as CombinedTaskMsg,
+    AdvancedLogicalCameraImage as AdvancedLogicalCameraImageMsg,
+    PartPose as PartPoseMsg,
+)
+
+from ariac_msgs.srv import (
+    VacuumGripperControl,
+    MoveAGV
+)
+
+from std_srvs.srv import Trigger
+
+
+@dataclass
+class KittingPart:
+    &#39;&#39;&#39;
+    Class to store information about a KittingPartMsg.
+    &#39;&#39;&#39;
+    quadrant: int
+    part_type: int
+    part_color: int
+        
+
+class KittingTask:
+    &#39;&#39;&#39;
+    Class to store information about a KittingTaskMsg.
+    &#39;&#39;&#39;
+    def __init__(self, kitting_task_msg: KittingTaskMsg) -&gt; None:
+        self.agv_number = kitting_task_msg.agv_number
+        self.tray_id = kitting_task_msg.tray_id
+        self.destination = kitting_task_msg.destination
+        # list of KittingPart objects
+        self.parts = list(map(lambda x: KittingPart(x.quadrant, x.part.type, x.part.color), kitting_task_msg.parts))
+        # self.parts = list(map(lambda x: KittingPart(x), kitting_task_msg.parts))
+
+class AssemblyPart:
+    &#39;&#39;&#39;
+    Class to store information about a AssemblyPartMsg.
+    &#39;&#39;&#39;
+    def __init__(self, assembly_part: AssemblyPartMsg) -&gt; None:
+        self.part_type = assembly_part.part.type
+        self.part_color = assembly_part.part.color
+        self.assembled_pose = assembly_part.assembled_pose
+        self.install_direction = assembly_part.install_direction
+
+class AssemblyTask:
+    &#39;&#39;&#39;
+    Class to store information about a AssemblyTaskMsg.
+    &#39;&#39;&#39;
+    def __init__(self, assembly_task: AssemblyTaskMsg) -&gt; None:
+        self.agv_numbers = assembly_task.agv_numbers
+        self.station = assembly_task.station
+        # list of AssemblyPart objects
+        self.parts = list(map(lambda x: AssemblyPart(x), assembly_task.parts))
+
+class CombinedTask:
+    &#39;&#39;&#39;
+    Class to store information about a CombinedTaskMsg.
+    &#39;&#39;&#39;
+
+    def __init__(self, combined_task: CombinedTaskMsg) -&gt; None:
+        self.station = combined_task.station
+        # list of AssemblyPart objects
+        self.parts = list(map(lambda x: AssemblyPart(x), combined_task.parts))
+class Order:
+    &#39;&#39;&#39; Order class for storing order information from the topic /ariac/orders.
+    &#39;&#39;&#39;
+
+    def __init__(self, msg: OrderMsg) -&gt; None:
+        self.order_id = msg.id
+        self.order_type = msg.type
+        self.order_priority = msg.priority
+
+        if self.order_type == OrderMsg.KITTING:
+            self.order_task = KittingTask(msg.kitting_task)
+        elif self.order_type == OrderMsg.ASSEMBLY:
+            self.order_task = AssemblyTask(msg.assembly_task)
+        elif self.order_type == OrderMsg.COMBINED:
+            self.order_task = CombinedTask(msg.combined_task)
+        else:
+            self.order_task = None
+            
+class AdvancedLogicalCameraImage:
+    &#39;&#39;&#39;
+    Class to store information about a AdvancedLogicalCameraImage.
+    &#39;&#39;&#39;
+
+    def __init__(self, msg: AdvancedLogicalCameraImageMsg) -&gt; None:
+        self.part_poses = msg.part_poses
+        self.tray_poses = msg.tray_poses
+        self.sensor_pose = msg.sensor_pose
+
+class CompetitionInterface(Node):
+    &#39;&#39;&#39;
+    Class for a competition interface node.
+
+    Args:
+        Node (rclpy.node.Node): Parent class for ROS nodes
+
+    Raises:
+        KeyboardInterrupt: Exception raised when the user uses Ctrl+C to kill a process
+    &#39;&#39;&#39;
+
+    part_colors_ = {
+        Part.RED: &#39;red&#39;,
+        Part.BLUE: &#39;blue&#39;,
+        Part.GREEN: &#39;green&#39;,
+        Part.ORANGE: &#39;orange&#39;,
+        Part.PURPLE: &#39;purple&#39;,
+    }
+    
+    part_colors_emoji_ = {
+        Part.RED: &#39;🟥&#39;,
+        Part.BLUE: &#39;🟦&#39;,
+        Part.GREEN: &#39;🟩&#39;,
+        Part.ORANGE: &#39;🟧&#39;,
+        Part.PURPLE: &#39;🟪&#39;,
+    }
+
+    &#39;&#39;&#39;Dictionary for converting PartColor constants to strings&#39;&#39;&#39;
+
+    part_types_ = {
+        Part.BATTERY: &#39;battery&#39;,
+        Part.PUMP: &#39;pump&#39;,
+        Part.REGULATOR: &#39;regulator&#39;,
+        Part.SENSOR: &#39;sensor&#39;,
+    }
+    &#39;&#39;&#39;Dictionary for converting PartType constants to strings&#39;&#39;&#39;
+
+
+    competition_states_ = {
+        CompetitionState.IDLE: &#39;idle&#39;,
+        CompetitionState.READY: &#39;ready&#39;,
+        CompetitionState.STARTED: &#39;started&#39;,
+        CompetitionState.ORDER_ANNOUNCEMENTS_DONE: &#39;order_announcements_done&#39;,
+        CompetitionState.ENDED: &#39;ended&#39;,
+    }
+    &#39;&#39;&#39;Dictionary for converting CompetitionState constants to strings&#39;&#39;&#39;
+
+
+    destinations_ = {
+        AGVStatus.KITTING: &#39;kitting station&#39;,
+        AGVStatus.ASSEMBLY_FRONT: &#39;front assembly station&#39;,
+        AGVStatus.ASSEMBLY_BACK: &#39;back assembly station&#39;,
+        AGVStatus.WAREHOUSE: &#39;warehouse&#39;,
+    }
+    &#39;&#39;&#39;Dictionary for converting AGVDestination constants to strings&#39;&#39;&#39;
+
+    stations_ = {
+        AssemblyTaskMsg.AS1: &#34;assembly station 1&#34;,
+        AssemblyTaskMsg.AS2: &#34;assembly station 2&#34;,
+        AssemblyTaskMsg.AS3: &#34;assembly station 3&#34;,
+        AssemblyTaskMsg.AS4: &#34;assembly station 4&#34;,
+    }
+    &#39;&#39;&#39;Dictionary for converting AssemblyTaskMsg constants to strings&#39;&#39;&#39;
+
+    gripper_states_ = {
+        True: &#39;enabled&#39;,
+        False: &#39;disabled&#39;
+    }
+    &#39;&#39;&#39;Dictionary for converting VacuumGripperState constants to strings&#39;&#39;&#39;
+
+    def __init__(self):
+        super().__init__(&#39;competition_interface&#39;)
+
+        sim_time = Parameter(
+            &#34;use_sim_time&#34;,
+            rclpy.Parameter.Type.BOOL,
+            True
+        )
+
+        self.set_parameters([sim_time])
+        
+        # Flag for parsing incoming orders
+        self.parse_incoming_order = False
+        # Flag for parsing incoming competition state
+        self.competition_state = None
+
+        # Subscriber to the competition state topic
+        self.subscription = self.create_subscription(
+            CompetitionState,
+            &#39;/ariac/competition_state&#39;,
+            self.competition_state_cb,
+            10)
+        # Subscriber to the floor gripper state topic
+        self.floor_robot_gripper_state_sub = self.create_subscription(
+            VacuumGripperState,
+            &#39;/ariac/floor_robot_gripper_state&#39;,
+            self.floor_robot_gripper_state_cb,
+            qos_profile_sensor_data)
+        # Subscriber to the break beam status topic
+        self.break_beam_sub = self.create_subscription(
+            BreakBeamStatus,
+            &#39;/ariac/sensors/breakbeam_0/status&#39;,
+            self.breakbeam0_cb,
+            qos_profile_sensor_data)
+        # Subscriber to the logical camera topic
+        self.advanced_camera0_sub = self.create_subscription(
+            AdvancedLogicalCameraImageMsg,
+            &#39;/ariac/sensors/advanced_camera_0/image&#39;,
+            self.advanced_camera0_cb,
+            qos_profile_sensor_data)
+        # Subscriber to the order topic
+        self.orders_sub = self.create_subscription(
+            OrderMsg,
+            &#39;/ariac/orders&#39;,
+            self.orders_cb,
+            10
+        )
+
+        # Service client for starting the competition
+        self.starter = self.create_client(Trigger, &#39;/ariac/start_competition&#39;)
+        # Service client for turning on/off the vacuum gripper on the floor robot
+        self.floor_gripper_enable = self.create_client(
+            VacuumGripperControl,
+            &#34;/ariac/floor_robot_enable_gripper&#34;)
+        # Service client for moving the floor robot to the home position
+        self.move_floor_robot_home = self.create_client(
+            Trigger, &#39;/competitor/move_floor_robot_home&#39;)
+        # Service client for moving the ceiling robot to the home position
+        self.move_ceiling_robot_home = self.create_client(
+            Trigger, &#39;/competitor/move_ceiling_robot_home&#39;)
+
+        self.part_count = 0
+        self.object_detected = False
+        # List of orders
+        self.orders = []
+        self.camera_images = []
+        # Attribute to store the current state of the floor robot gripper
+        self.floor_robot_gripper_state = VacuumGripperState()
+
+    def competition_state_cb(self, msg: CompetitionState):
+        &#39;&#39;&#39;Callback for the topic /ariac/competition_state
+
+        Arguments:
+            msg -- CompetitionState message
+        &#39;&#39;&#39;
+        # Log if competition state has changed
+        if self.competition_state != msg.competition_state:
+            self.get_logger().info(
+                f&#39;Competition state is: \
+                {CompetitionInterface.competition_states_[msg.competition_state]}&#39;,
+                throttle_duration_sec=1.0)
+        self.competition_state = msg.competition_state
+
+    def start_competition(self):
+        &#39;&#39;&#39;Function to start the competition.
+        &#39;&#39;&#39;
+        self.get_logger().info(&#39;Waiting for competition to be ready&#39;)
+
+        # Wait for competition to be ready
+        while self.competition_state != CompetitionState.READY:
+            try:
+                rclpy.spin_once(self)
+            except KeyboardInterrupt:
+                return
+
+        self.get_logger().info(&#39;Competition is ready. Starting...&#39;)
+
+        # Call ROS service to start competition
+        while not self.starter.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info(&#39;Waiting for /ariac/start_competition to be available...&#39;)
+
+        # Create trigger request and call starter service
+        request = Trigger.Request()
+        future = self.starter.call_async(request)
+
+        # Wait until the service call is completed
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result().success:
+            self.get_logger().info(&#39;Started competition.&#39;)
+        else:
+            self.get_logger().info(&#39;Unable to start competition&#39;)
+            
+    def advanced_camera0_cb(self, msg: AdvancedLogicalCameraImageMsg):
+        &#39;&#39;&#39;Callback for the topic /ariac/sensors/advanced_camera_0/image
+
+        Arguments:
+            msg -- AdvancedLogicalCameraImage message
+        &#39;&#39;&#39;
+        image = AdvancedLogicalCameraImage(msg)
+        self.camera_images.clear()
+        self.camera_images.append(image)
+
+    def breakbeam0_cb(self, msg: BreakBeamStatus):
+        &#39;&#39;&#39;Callback for the topic /ariac/sensors/breakbeam_0/status
+
+        Arguments:
+            msg -- BreakBeamStatus message
+        &#39;&#39;&#39;
+        if not self.object_detected and msg.object_detected:
+            self.part_count += 1
+
+        self.object_detected = msg.object_detected
+
+    def orders_cb(self, msg: Order):
+        &#39;&#39;&#39;Callback for the topic /ariac/orders
+
+        Arguments:
+            msg -- Order message
+        &#39;&#39;&#39;
+        order = Order(msg)
+        self.orders.append(order)
+        if self.parse_incoming_order:
+            self.get_logger().info(self.parse_order(order))
+            
+    def multiply_pose(self, pose1: Pose, pose2: Pose):
+        &#39;&#39;&#39;
+        Use KDL to multiply two poses together.
+
+        Args:
+            pose1 (Pose): Pose of the first frame
+            pose2 (Pose): Pose of the second frame
+
+        Returns:
+            Pose: Pose of the resulting frame
+        &#39;&#39;&#39;
+        
+        frame1 = PyKDL.Frame(PyKDL.Rotation.Quaternion(pose1.orientation.x, pose1.orientation.y, pose1.orientation.z, pose1.orientation.w), PyKDL.Vector(pose1.position.x, pose1.position.y, pose1.position.z))
+        frame2 = PyKDL.Frame(PyKDL.Rotation.Quaternion(pose2.orientation.x, pose2.orientation.y, pose2.orientation.z, pose2.orientation.w), PyKDL.Vector(pose2.position.x, pose2.position.y, pose2.position.z))
+        
+        frame3: PyKDL.Frame = frame1 * frame2
+        
+        # return the resulting pose from frame3
+        tf2 = Pose()
+        tf2.position.x = frame3.p.x()
+        tf2.position.y = frame3.p.y()
+        tf2.position.z = frame3.p.z()
+        tf2.orientation.x = frame3.M.GetQuaternion()[0]
+        tf2.orientation.y = frame3.M.GetQuaternion()[1]
+        tf2.orientation.z = frame3.M.GetQuaternion()[2]
+        tf2.orientation.w = frame3.M.GetQuaternion()[3]
+        
+        return tf2
+        
+    def parse_advanced_camera_image(self, image: AdvancedLogicalCameraImage):
+        &#39;&#39;&#39;
+        Parse an AdvancedLogicalCameraImage message and return a string representation.
+    
+
+        Args:
+            image (AdvancedLogicalCameraImage): Object of type AdvancedLogicalCameraImage
+        &#39;&#39;&#39;
+        output = &#39;\n\n==========================\n&#39;
+        
+        sensor_pose: Pose = image.sensor_pose
+        
+        part_pose: PartPoseMsg
+        for part_pose in image.part_poses:
+            part_color = CompetitionInterface.part_colors_[part_pose.part.color].capitalize()
+            part_color_emoji = CompetitionInterface.part_colors_emoji_[part_pose.part.color]
+            part_type = CompetitionInterface.part_types_[part_pose.part.type].capitalize()
+            output += f&#39;Part: {part_color_emoji} {part_color} {part_type}\n&#39;
+            output += &#39;==========================\n&#39;
+            output += &#39;Camera Frame\n&#39;
+            output += &#39;==========================\n&#39;
+            position = f&#39;x: {part_pose.pose.position.x}\n\t\ty: {part_pose.pose.position.y}\n\t\tz: {part_pose.pose.position.z}&#39;
+            orientation = f&#39;x: {part_pose.pose.orientation.x}\n\t\ty: {part_pose.pose.orientation.y}\n\t\tz: {part_pose.pose.orientation.z}\n\t\tw: {part_pose.pose.orientation.w}&#39;
+
+            output += &#39;\tPosition:\n&#39;
+            output += f&#39;\t\t{position}\n&#39;
+            output += &#39;\tOrientation:\n&#39;
+            output += f&#39;\t\t{orientation}\n&#39;
+            output += &#39;==========================\n&#39;
+            output += &#39;World Frame\n&#39;
+            output += &#39;==========================\n&#39;
+            part_world_pose = self.multiply_pose(sensor_pose, part_pose.pose)
+            position = f&#39;x: {part_world_pose.position.x}\n\t\ty: {part_world_pose.position.y}\n\t\tz: {part_world_pose.position.z}&#39;
+            orientation = f&#39;x: {part_world_pose.orientation.x}\n\t\ty: {part_world_pose.orientation.y}\n\t\tz: {part_world_pose.orientation.z}\n\t\tw: {part_world_pose.orientation.w}&#39;
+
+            output += &#39;\tPosition:\n&#39;
+            output += f&#39;\t\t{position}\n&#39;
+            output += &#39;\tOrientation:\n&#39;
+            output += f&#39;\t\t{orientation}\n&#39;
+            output += &#39;==========================\n&#39;
+        
+        return output
+
+    def parse_order(self, order: Order):
+        &#39;&#39;&#39;Parse an order message and return a string representation.
+
+        Args:
+            order -- Order message
+
+        Returns:
+            String representation of the order message
+        &#39;&#39;&#39;
+        output = &#39;\n\n==========================\n&#39;
+        output += f&#39;Received Order: {order.order_id}\n&#39;
+        output += f&#39;Priority: {order.order_priority}\n&#39;
+
+        if order.order_type == OrderMsg.KITTING:
+            kitting_task: KittingTask = order.order_task
+            output += &#39;Type: Kitting\n&#39;
+            output += &#39;==========================\n&#39;
+            output += f&#39;AGV: {kitting_task.agv_number}\n&#39;
+            output += f&#39;Destination: {self.destinations_[kitting_task.destination]}\n&#39;
+            output += f&#39;Tray ID: {kitting_task.tray_id}\n&#39;
+            output += &#39;Products:\n&#39;
+            output += &#39;==========================\n&#39;
+
+            quadrants = {1: &#34;Quadrant 1: -&#34;,
+                         2: &#34;Quadrant 2: -&#34;,
+                         3: &#34;Quadrant 3: -&#34;,
+                         4: &#34;Quadrant 4: -&#34;}
+
+            for i in range(1, 5):
+                product: KittingPartMsg
+                for product in kitting_task.parts:
+                    if i == product.quadrant:
+                        part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+                        part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+                        part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+                        quadrants[i] = f&#39;Quadrant {i}: {part_color_emoji} {part_color} {part_type}&#39;
+            output += f&#39;\t{quadrants[1]}\n&#39;
+            output += f&#39;\t{quadrants[2]}\n&#39;
+            output += f&#39;\t{quadrants[3]}\n&#39;
+            output += f&#39;\t{quadrants[4]}\n&#39;
+
+        elif order.order_type == OrderMsg.ASSEMBLY:
+            assembly_task: AssemblyTask = order.order_task
+            output += &#39;Type: Assembly\n&#39;
+            output += &#39;==========================\n&#39;
+            if len(assembly_task.agv_numbers) == 1:
+                output += f&#39;AGV: {assembly_task.agv_number[0]}\n&#39;
+            elif len(assembly_task.agv_numbers) == 2:
+                output += f&#39;AGV(s): [{assembly_task.agv_numbers[0]}, {assembly_task.agv_numbers[1]}]\n&#39;
+            output += f&#39;Assembly station: {self.destinations_[assembly_task.station].title()}\n&#39;
+            output += &#39;Products:\n&#39;
+            output += &#39;==========================\n&#39;
+
+            product: AssemblyPartMsg
+            for product in assembly_task.parts:
+                part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+                part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+                part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+                assembled_pose_position = product.assembled_pose.pose.position
+                assembled_pose_orientation = product.assembled_pose.pose.orientation
+                install_direction = product.install_direction
+                position = f&#39;x: {assembled_pose_position.x}\n\t\ty: {assembled_pose_position.y}\n\t\tz: {assembled_pose_position.z}&#39;
+                orientation = f&#39;x: {assembled_pose_orientation.x}\n\t\ty: {assembled_pose_orientation.y}\n\t\tz: {assembled_pose_orientation.z}\n\t\tw: {assembled_pose_orientation.w}&#39;
+                output += f&#39;\tPart: {part_color_emoji} {part_color} {part_type}\n&#39;
+                output += &#39;\tPosition:\n&#39;
+                output += f&#39;\t\t{position}\n&#39;
+                output += &#39;\tOrientation:\n&#39;
+                output += f&#39;\t\t{orientation}\n&#39;
+                output += f&#39;\tInstall direction: [{install_direction.x}, {install_direction.y}, {install_direction.z}]\n\n&#39;
+        
+        elif order.order_type == OrderMsg.COMBINED:
+            combined_task: CombinedTask = order.order_task
+            output += &#39;Type: Combined\n&#39;
+            output += &#39;==========================\n&#39;
+            output += f&#39;Assembly station: {self.destinations_[combined_task.station].title()}\n&#39;
+            output += &#39;Products:\n&#39;
+            output += &#39;==========================\n&#39;
+
+            product: AssemblyPartMsg
+            for product in combined_task.parts:
+                part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+                part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+                part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+                assembled_pose_position = product.assembled_pose.pose.position
+                assembled_pose_orientation = product.assembled_pose.pose.orientation
+                install_direction = product.install_direction
+                position = f&#39;x: {assembled_pose_position.x}\n\t\ty: {assembled_pose_position.y}\n\t\tz: {assembled_pose_position.z}&#39;
+                orientation = f&#39;x: {assembled_pose_orientation.x}\n\t\ty: {assembled_pose_orientation.y}\n\t\tz: {assembled_pose_orientation.z}\n\t\tw: {assembled_pose_orientation.w}&#39;
+                output += f&#39;\tPart: {part_color_emoji} {part_color} {part_type}\n&#39;
+                output += &#39;\tPosition:\n&#39;
+                output += f&#39;\t\t{position}\n&#39;
+                output += &#39;\tOrientation:\n&#39;
+                output += f&#39;\t\t{orientation}\n&#39;
+                output += f&#39;\tInstall direction: [{install_direction.x}, {install_direction.y}, {install_direction.z}]\n\n&#39;
+        else:
+            output += &#39;Type: Unknown\n&#39;
+        return output
+
+    def floor_robot_gripper_state_cb(self, msg: VacuumGripperState):
+        &#39;&#39;&#39;Callback for the topic /ariac/floor_robot_gripper_state
+
+        Arguments:
+            msg -- VacuumGripperState message
+        &#39;&#39;&#39;
+        self.floor_robot_gripper_state = msg
+
+    def set_floor_robot_gripper_state(self, state):
+        &#39;&#39;&#39;Set the gripper state of the floor robot.
+
+        Arguments:
+            state -- True to enable, False to disable
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        &#39;&#39;&#39;
+        if self.floor_robot_gripper_state.enabled == state:
+            self.get_logger().warn(f&#39;Gripper is already {self.gripper_states_[state]}&#39;)
+            return
+
+        request = VacuumGripperControl.Request()
+        request.enable = state
+
+        future = self.floor_gripper_enable.call_async(request)
+
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        if future.result().success:
+            self.get_logger().info(f&#39;Changed gripper state to {self.gripper_states_[state]}&#39;)
+        else:
+            self.get_logger().warn(&#39;Unable to change gripper state&#39;)
+
+    def wait(self, duration):
+        &#39;&#39;&#39;Wait for a specified duration.
+
+        Arguments:
+            duration -- Duration to wait in seconds
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        &#39;&#39;&#39;
+        start = self.get_clock().now()
+
+        while self.get_clock().now() &lt;= start + Duration(seconds=duration):
+            try:
+                rclpy.spin_once(self)
+            except KeyboardInterrupt as kb_error:
+                raise KeyboardInterrupt from kb_error
+
+    def lock_agv_tray(self, num):
+        &#39;&#39;&#39;Function to lock the tray of an AGV.
+
+        Arguments:
+            num -- AGV number
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        &#39;&#39;&#39;
+        tray_locker = self.create_client(
+            Trigger,
+            f&#39;/ariac/agv{num}_lock_tray&#39;
+        )
+
+        request = Trigger.Request()
+
+        future = tray_locker.call_async(request)
+
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        if future.result().success:
+            self.get_logger().info(f&#39;Locked AGV{num}\&#39;s tray&#39;)
+        else:
+            self.get_logger().warn(&#39;Unable to lock tray&#39;)
+
+    def move_agv_to_station(self, num, station):
+        &#39;&#39;&#39;Function to move an AGV to a station.
+
+        Arguments:
+            num -- AGV number
+
+            station -- Station to move to
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        &#39;&#39;&#39;
+        mover = self.create_client(
+            MoveAGV,
+            f&#39;/ariac/move_agv{num}&#39;)
+
+        request = MoveAGV.Request()
+
+        if station in [AssemblyTaskMsg.AS1, AssemblyTaskMsg.AS3]:
+            request.location = MoveAGV.Request.ASSEMBLY_FRONT
+        else:
+            request.location = MoveAGV.Request.ASSEMBLY_BACK
+
+        future = mover.call_async(request)
+
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        if future.result().success:
+            self.get_logger().info(f&#39;Moved AGV{num} to {self.stations_[station]}&#39;)
+        else:
+            self.get_logger().warn(future.result().message)
+
+    def move_robot_home(self, robot_name):
+        &#39;&#39;&#39;Move one of the robots to its home position.
+
+        Arguments:
+            robot_name -- Name of the robot to move home
+        &#39;&#39;&#39;
+        request = Trigger.Request()
+
+        if robot_name == &#39;floor_robot&#39;:
+            if not self.move_floor_robot_home.wait_for_service(timeout_sec=1.0):
+                self.get_logger().error(&#39;Robot commander node not running&#39;)
+                return
+
+            future = self.move_floor_robot_home.call_async(request)
+
+        elif robot_name == &#39;ceiling_robot&#39;:
+            if not self.move_ceiling_robot_home.wait_for_service(timeout_sec=1.0):
+                self.get_logger().error(&#39;Robot commander node not running&#39;)
+                return
+            future = self.move_ceiling_robot_home.call_async(request)
+        else:
+            self.get_logger().error(f&#39;Robot name: ({robot_name}) is not valid&#39;)
+            return
+
+        # Wait until the service call is completed
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result().success:
+            self.get_logger().info(f&#39;Moved {robot_name} to home position&#39;)
+        else:
+            self.get_logger().warn(future.result().message)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ariac_tutorials.competition_interface.AdvancedLogicalCameraImage"><code class="flex name class">
+<span>class <span class="ident">AdvancedLogicalCameraImage</span></span>
+<span>(</span><span>msg: ariac_msgs.msg._advanced_logical_camera_image.AdvancedLogicalCameraImage)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to store information about a AdvancedLogicalCameraImage.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AdvancedLogicalCameraImage:
+    &#39;&#39;&#39;
+    Class to store information about a AdvancedLogicalCameraImage.
+    &#39;&#39;&#39;
+
+    def __init__(self, msg: AdvancedLogicalCameraImageMsg) -&gt; None:
+        self.part_poses = msg.part_poses
+        self.tray_poses = msg.tray_poses
+        self.sensor_pose = msg.sensor_pose</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.AssemblyPart"><code class="flex name class">
+<span>class <span class="ident">AssemblyPart</span></span>
+<span>(</span><span>assembly_part: ariac_msgs.msg._assembly_part.AssemblyPart)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to store information about a AssemblyPartMsg.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AssemblyPart:
+    &#39;&#39;&#39;
+    Class to store information about a AssemblyPartMsg.
+    &#39;&#39;&#39;
+    def __init__(self, assembly_part: AssemblyPartMsg) -&gt; None:
+        self.part_type = assembly_part.part.type
+        self.part_color = assembly_part.part.color
+        self.assembled_pose = assembly_part.assembled_pose
+        self.install_direction = assembly_part.install_direction</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.AssemblyTask"><code class="flex name class">
+<span>class <span class="ident">AssemblyTask</span></span>
+<span>(</span><span>assembly_task: ariac_msgs.msg._assembly_task.AssemblyTask)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to store information about a AssemblyTaskMsg.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AssemblyTask:
+    &#39;&#39;&#39;
+    Class to store information about a AssemblyTaskMsg.
+    &#39;&#39;&#39;
+    def __init__(self, assembly_task: AssemblyTaskMsg) -&gt; None:
+        self.agv_numbers = assembly_task.agv_numbers
+        self.station = assembly_task.station
+        # list of AssemblyPart objects
+        self.parts = list(map(lambda x: AssemblyPart(x), assembly_task.parts))</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CombinedTask"><code class="flex name class">
+<span>class <span class="ident">CombinedTask</span></span>
+<span>(</span><span>combined_task: ariac_msgs.msg._combined_task.CombinedTask)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to store information about a CombinedTaskMsg.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CombinedTask:
+    &#39;&#39;&#39;
+    Class to store information about a CombinedTaskMsg.
+    &#39;&#39;&#39;
+
+    def __init__(self, combined_task: CombinedTaskMsg) -&gt; None:
+        self.station = combined_task.station
+        # list of AssemblyPart objects
+        self.parts = list(map(lambda x: AssemblyPart(x), combined_task.parts))</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface"><code class="flex name class">
+<span>class <span class="ident">CompetitionInterface</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class for a competition interface node.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>Node</code></strong> :&ensp;<code>rclpy.node.Node</code></dt>
+<dd>Parent class for ROS nodes</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyboardInterrupt</code></dt>
+<dd>Exception raised when the user uses Ctrl+C to kill a process</dd>
+</dl>
+<p>Create a Node.</p>
+<p>:param node_name: A name to give to this node. Validated by :func:<code>validate_node_name</code>.
+:param context: The context to be associated with, or <code>None</code> for the default global
+context.
+:param cli_args: A list of strings of command line args to be used only by this node.
+These arguments are used to extract remappings used by the node and other ROS specific
+settings, as well as user defined non-ROS arguments.
+:param namespace: The namespace to which relative topic and service names will be prefixed.
+Validated by :func:<code>validate_namespace</code>.
+:param use_global_arguments: <code>False</code> if the node should ignore process-wide command line
+args.
+:param enable_rosout: <code>False</code> if the node should ignore rosout logging.
+:param start_parameter_services: <code>False</code> if the node should not create parameter
+services.
+:param parameter_overrides: A list of overrides for initial values for parameters declared
+on the node.
+:param allow_undeclared_parameters: True if undeclared parameters are allowed.
+This flag affects the behavior of parameter-related operations.
+:param automatically_declare_parameters_from_overrides: If True, the "parameter overrides"
+will be used to implicitly declare parameters on the node during creation.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CompetitionInterface(Node):
+    &#39;&#39;&#39;
+    Class for a competition interface node.
+
+    Args:
+        Node (rclpy.node.Node): Parent class for ROS nodes
+
+    Raises:
+        KeyboardInterrupt: Exception raised when the user uses Ctrl+C to kill a process
+    &#39;&#39;&#39;
+
+    part_colors_ = {
+        Part.RED: &#39;red&#39;,
+        Part.BLUE: &#39;blue&#39;,
+        Part.GREEN: &#39;green&#39;,
+        Part.ORANGE: &#39;orange&#39;,
+        Part.PURPLE: &#39;purple&#39;,
+    }
+    
+    part_colors_emoji_ = {
+        Part.RED: &#39;🟥&#39;,
+        Part.BLUE: &#39;🟦&#39;,
+        Part.GREEN: &#39;🟩&#39;,
+        Part.ORANGE: &#39;🟧&#39;,
+        Part.PURPLE: &#39;🟪&#39;,
+    }
+
+    &#39;&#39;&#39;Dictionary for converting PartColor constants to strings&#39;&#39;&#39;
+
+    part_types_ = {
+        Part.BATTERY: &#39;battery&#39;,
+        Part.PUMP: &#39;pump&#39;,
+        Part.REGULATOR: &#39;regulator&#39;,
+        Part.SENSOR: &#39;sensor&#39;,
+    }
+    &#39;&#39;&#39;Dictionary for converting PartType constants to strings&#39;&#39;&#39;
+
+
+    competition_states_ = {
+        CompetitionState.IDLE: &#39;idle&#39;,
+        CompetitionState.READY: &#39;ready&#39;,
+        CompetitionState.STARTED: &#39;started&#39;,
+        CompetitionState.ORDER_ANNOUNCEMENTS_DONE: &#39;order_announcements_done&#39;,
+        CompetitionState.ENDED: &#39;ended&#39;,
+    }
+    &#39;&#39;&#39;Dictionary for converting CompetitionState constants to strings&#39;&#39;&#39;
+
+
+    destinations_ = {
+        AGVStatus.KITTING: &#39;kitting station&#39;,
+        AGVStatus.ASSEMBLY_FRONT: &#39;front assembly station&#39;,
+        AGVStatus.ASSEMBLY_BACK: &#39;back assembly station&#39;,
+        AGVStatus.WAREHOUSE: &#39;warehouse&#39;,
+    }
+    &#39;&#39;&#39;Dictionary for converting AGVDestination constants to strings&#39;&#39;&#39;
+
+    stations_ = {
+        AssemblyTaskMsg.AS1: &#34;assembly station 1&#34;,
+        AssemblyTaskMsg.AS2: &#34;assembly station 2&#34;,
+        AssemblyTaskMsg.AS3: &#34;assembly station 3&#34;,
+        AssemblyTaskMsg.AS4: &#34;assembly station 4&#34;,
+    }
+    &#39;&#39;&#39;Dictionary for converting AssemblyTaskMsg constants to strings&#39;&#39;&#39;
+
+    gripper_states_ = {
+        True: &#39;enabled&#39;,
+        False: &#39;disabled&#39;
+    }
+    &#39;&#39;&#39;Dictionary for converting VacuumGripperState constants to strings&#39;&#39;&#39;
+
+    def __init__(self):
+        super().__init__(&#39;competition_interface&#39;)
+
+        sim_time = Parameter(
+            &#34;use_sim_time&#34;,
+            rclpy.Parameter.Type.BOOL,
+            True
+        )
+
+        self.set_parameters([sim_time])
+        
+        # Flag for parsing incoming orders
+        self.parse_incoming_order = False
+        # Flag for parsing incoming competition state
+        self.competition_state = None
+
+        # Subscriber to the competition state topic
+        self.subscription = self.create_subscription(
+            CompetitionState,
+            &#39;/ariac/competition_state&#39;,
+            self.competition_state_cb,
+            10)
+        # Subscriber to the floor gripper state topic
+        self.floor_robot_gripper_state_sub = self.create_subscription(
+            VacuumGripperState,
+            &#39;/ariac/floor_robot_gripper_state&#39;,
+            self.floor_robot_gripper_state_cb,
+            qos_profile_sensor_data)
+        # Subscriber to the break beam status topic
+        self.break_beam_sub = self.create_subscription(
+            BreakBeamStatus,
+            &#39;/ariac/sensors/breakbeam_0/status&#39;,
+            self.breakbeam0_cb,
+            qos_profile_sensor_data)
+        # Subscriber to the logical camera topic
+        self.advanced_camera0_sub = self.create_subscription(
+            AdvancedLogicalCameraImageMsg,
+            &#39;/ariac/sensors/advanced_camera_0/image&#39;,
+            self.advanced_camera0_cb,
+            qos_profile_sensor_data)
+        # Subscriber to the order topic
+        self.orders_sub = self.create_subscription(
+            OrderMsg,
+            &#39;/ariac/orders&#39;,
+            self.orders_cb,
+            10
+        )
+
+        # Service client for starting the competition
+        self.starter = self.create_client(Trigger, &#39;/ariac/start_competition&#39;)
+        # Service client for turning on/off the vacuum gripper on the floor robot
+        self.floor_gripper_enable = self.create_client(
+            VacuumGripperControl,
+            &#34;/ariac/floor_robot_enable_gripper&#34;)
+        # Service client for moving the floor robot to the home position
+        self.move_floor_robot_home = self.create_client(
+            Trigger, &#39;/competitor/move_floor_robot_home&#39;)
+        # Service client for moving the ceiling robot to the home position
+        self.move_ceiling_robot_home = self.create_client(
+            Trigger, &#39;/competitor/move_ceiling_robot_home&#39;)
+
+        self.part_count = 0
+        self.object_detected = False
+        # List of orders
+        self.orders = []
+        self.camera_images = []
+        # Attribute to store the current state of the floor robot gripper
+        self.floor_robot_gripper_state = VacuumGripperState()
+
+    def competition_state_cb(self, msg: CompetitionState):
+        &#39;&#39;&#39;Callback for the topic /ariac/competition_state
+
+        Arguments:
+            msg -- CompetitionState message
+        &#39;&#39;&#39;
+        # Log if competition state has changed
+        if self.competition_state != msg.competition_state:
+            self.get_logger().info(
+                f&#39;Competition state is: \
+                {CompetitionInterface.competition_states_[msg.competition_state]}&#39;,
+                throttle_duration_sec=1.0)
+        self.competition_state = msg.competition_state
+
+    def start_competition(self):
+        &#39;&#39;&#39;Function to start the competition.
+        &#39;&#39;&#39;
+        self.get_logger().info(&#39;Waiting for competition to be ready&#39;)
+
+        # Wait for competition to be ready
+        while self.competition_state != CompetitionState.READY:
+            try:
+                rclpy.spin_once(self)
+            except KeyboardInterrupt:
+                return
+
+        self.get_logger().info(&#39;Competition is ready. Starting...&#39;)
+
+        # Call ROS service to start competition
+        while not self.starter.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info(&#39;Waiting for /ariac/start_competition to be available...&#39;)
+
+        # Create trigger request and call starter service
+        request = Trigger.Request()
+        future = self.starter.call_async(request)
+
+        # Wait until the service call is completed
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result().success:
+            self.get_logger().info(&#39;Started competition.&#39;)
+        else:
+            self.get_logger().info(&#39;Unable to start competition&#39;)
+            
+    def advanced_camera0_cb(self, msg: AdvancedLogicalCameraImageMsg):
+        &#39;&#39;&#39;Callback for the topic /ariac/sensors/advanced_camera_0/image
+
+        Arguments:
+            msg -- AdvancedLogicalCameraImage message
+        &#39;&#39;&#39;
+        image = AdvancedLogicalCameraImage(msg)
+        self.camera_images.clear()
+        self.camera_images.append(image)
+
+    def breakbeam0_cb(self, msg: BreakBeamStatus):
+        &#39;&#39;&#39;Callback for the topic /ariac/sensors/breakbeam_0/status
+
+        Arguments:
+            msg -- BreakBeamStatus message
+        &#39;&#39;&#39;
+        if not self.object_detected and msg.object_detected:
+            self.part_count += 1
+
+        self.object_detected = msg.object_detected
+
+    def orders_cb(self, msg: Order):
+        &#39;&#39;&#39;Callback for the topic /ariac/orders
+
+        Arguments:
+            msg -- Order message
+        &#39;&#39;&#39;
+        order = Order(msg)
+        self.orders.append(order)
+        if self.parse_incoming_order:
+            self.get_logger().info(self.parse_order(order))
+            
+    def multiply_pose(self, pose1: Pose, pose2: Pose):
+        &#39;&#39;&#39;
+        Use KDL to multiply two poses together.
+
+        Args:
+            pose1 (Pose): Pose of the first frame
+            pose2 (Pose): Pose of the second frame
+
+        Returns:
+            Pose: Pose of the resulting frame
+        &#39;&#39;&#39;
+        
+        frame1 = PyKDL.Frame(PyKDL.Rotation.Quaternion(pose1.orientation.x, pose1.orientation.y, pose1.orientation.z, pose1.orientation.w), PyKDL.Vector(pose1.position.x, pose1.position.y, pose1.position.z))
+        frame2 = PyKDL.Frame(PyKDL.Rotation.Quaternion(pose2.orientation.x, pose2.orientation.y, pose2.orientation.z, pose2.orientation.w), PyKDL.Vector(pose2.position.x, pose2.position.y, pose2.position.z))
+        
+        frame3: PyKDL.Frame = frame1 * frame2
+        
+        # return the resulting pose from frame3
+        tf2 = Pose()
+        tf2.position.x = frame3.p.x()
+        tf2.position.y = frame3.p.y()
+        tf2.position.z = frame3.p.z()
+        tf2.orientation.x = frame3.M.GetQuaternion()[0]
+        tf2.orientation.y = frame3.M.GetQuaternion()[1]
+        tf2.orientation.z = frame3.M.GetQuaternion()[2]
+        tf2.orientation.w = frame3.M.GetQuaternion()[3]
+        
+        return tf2
+        
+    def parse_advanced_camera_image(self, image: AdvancedLogicalCameraImage):
+        &#39;&#39;&#39;
+        Parse an AdvancedLogicalCameraImage message and return a string representation.
+    
+
+        Args:
+            image (AdvancedLogicalCameraImage): Object of type AdvancedLogicalCameraImage
+        &#39;&#39;&#39;
+        output = &#39;\n\n==========================\n&#39;
+        
+        sensor_pose: Pose = image.sensor_pose
+        
+        part_pose: PartPoseMsg
+        for part_pose in image.part_poses:
+            part_color = CompetitionInterface.part_colors_[part_pose.part.color].capitalize()
+            part_color_emoji = CompetitionInterface.part_colors_emoji_[part_pose.part.color]
+            part_type = CompetitionInterface.part_types_[part_pose.part.type].capitalize()
+            output += f&#39;Part: {part_color_emoji} {part_color} {part_type}\n&#39;
+            output += &#39;==========================\n&#39;
+            output += &#39;Camera Frame\n&#39;
+            output += &#39;==========================\n&#39;
+            position = f&#39;x: {part_pose.pose.position.x}\n\t\ty: {part_pose.pose.position.y}\n\t\tz: {part_pose.pose.position.z}&#39;
+            orientation = f&#39;x: {part_pose.pose.orientation.x}\n\t\ty: {part_pose.pose.orientation.y}\n\t\tz: {part_pose.pose.orientation.z}\n\t\tw: {part_pose.pose.orientation.w}&#39;
+
+            output += &#39;\tPosition:\n&#39;
+            output += f&#39;\t\t{position}\n&#39;
+            output += &#39;\tOrientation:\n&#39;
+            output += f&#39;\t\t{orientation}\n&#39;
+            output += &#39;==========================\n&#39;
+            output += &#39;World Frame\n&#39;
+            output += &#39;==========================\n&#39;
+            part_world_pose = self.multiply_pose(sensor_pose, part_pose.pose)
+            position = f&#39;x: {part_world_pose.position.x}\n\t\ty: {part_world_pose.position.y}\n\t\tz: {part_world_pose.position.z}&#39;
+            orientation = f&#39;x: {part_world_pose.orientation.x}\n\t\ty: {part_world_pose.orientation.y}\n\t\tz: {part_world_pose.orientation.z}\n\t\tw: {part_world_pose.orientation.w}&#39;
+
+            output += &#39;\tPosition:\n&#39;
+            output += f&#39;\t\t{position}\n&#39;
+            output += &#39;\tOrientation:\n&#39;
+            output += f&#39;\t\t{orientation}\n&#39;
+            output += &#39;==========================\n&#39;
+        
+        return output
+
+    def parse_order(self, order: Order):
+        &#39;&#39;&#39;Parse an order message and return a string representation.
+
+        Args:
+            order -- Order message
+
+        Returns:
+            String representation of the order message
+        &#39;&#39;&#39;
+        output = &#39;\n\n==========================\n&#39;
+        output += f&#39;Received Order: {order.order_id}\n&#39;
+        output += f&#39;Priority: {order.order_priority}\n&#39;
+
+        if order.order_type == OrderMsg.KITTING:
+            kitting_task: KittingTask = order.order_task
+            output += &#39;Type: Kitting\n&#39;
+            output += &#39;==========================\n&#39;
+            output += f&#39;AGV: {kitting_task.agv_number}\n&#39;
+            output += f&#39;Destination: {self.destinations_[kitting_task.destination]}\n&#39;
+            output += f&#39;Tray ID: {kitting_task.tray_id}\n&#39;
+            output += &#39;Products:\n&#39;
+            output += &#39;==========================\n&#39;
+
+            quadrants = {1: &#34;Quadrant 1: -&#34;,
+                         2: &#34;Quadrant 2: -&#34;,
+                         3: &#34;Quadrant 3: -&#34;,
+                         4: &#34;Quadrant 4: -&#34;}
+
+            for i in range(1, 5):
+                product: KittingPartMsg
+                for product in kitting_task.parts:
+                    if i == product.quadrant:
+                        part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+                        part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+                        part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+                        quadrants[i] = f&#39;Quadrant {i}: {part_color_emoji} {part_color} {part_type}&#39;
+            output += f&#39;\t{quadrants[1]}\n&#39;
+            output += f&#39;\t{quadrants[2]}\n&#39;
+            output += f&#39;\t{quadrants[3]}\n&#39;
+            output += f&#39;\t{quadrants[4]}\n&#39;
+
+        elif order.order_type == OrderMsg.ASSEMBLY:
+            assembly_task: AssemblyTask = order.order_task
+            output += &#39;Type: Assembly\n&#39;
+            output += &#39;==========================\n&#39;
+            if len(assembly_task.agv_numbers) == 1:
+                output += f&#39;AGV: {assembly_task.agv_number[0]}\n&#39;
+            elif len(assembly_task.agv_numbers) == 2:
+                output += f&#39;AGV(s): [{assembly_task.agv_numbers[0]}, {assembly_task.agv_numbers[1]}]\n&#39;
+            output += f&#39;Assembly station: {self.destinations_[assembly_task.station].title()}\n&#39;
+            output += &#39;Products:\n&#39;
+            output += &#39;==========================\n&#39;
+
+            product: AssemblyPartMsg
+            for product in assembly_task.parts:
+                part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+                part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+                part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+                assembled_pose_position = product.assembled_pose.pose.position
+                assembled_pose_orientation = product.assembled_pose.pose.orientation
+                install_direction = product.install_direction
+                position = f&#39;x: {assembled_pose_position.x}\n\t\ty: {assembled_pose_position.y}\n\t\tz: {assembled_pose_position.z}&#39;
+                orientation = f&#39;x: {assembled_pose_orientation.x}\n\t\ty: {assembled_pose_orientation.y}\n\t\tz: {assembled_pose_orientation.z}\n\t\tw: {assembled_pose_orientation.w}&#39;
+                output += f&#39;\tPart: {part_color_emoji} {part_color} {part_type}\n&#39;
+                output += &#39;\tPosition:\n&#39;
+                output += f&#39;\t\t{position}\n&#39;
+                output += &#39;\tOrientation:\n&#39;
+                output += f&#39;\t\t{orientation}\n&#39;
+                output += f&#39;\tInstall direction: [{install_direction.x}, {install_direction.y}, {install_direction.z}]\n\n&#39;
+        
+        elif order.order_type == OrderMsg.COMBINED:
+            combined_task: CombinedTask = order.order_task
+            output += &#39;Type: Combined\n&#39;
+            output += &#39;==========================\n&#39;
+            output += f&#39;Assembly station: {self.destinations_[combined_task.station].title()}\n&#39;
+            output += &#39;Products:\n&#39;
+            output += &#39;==========================\n&#39;
+
+            product: AssemblyPartMsg
+            for product in combined_task.parts:
+                part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+                part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+                part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+                assembled_pose_position = product.assembled_pose.pose.position
+                assembled_pose_orientation = product.assembled_pose.pose.orientation
+                install_direction = product.install_direction
+                position = f&#39;x: {assembled_pose_position.x}\n\t\ty: {assembled_pose_position.y}\n\t\tz: {assembled_pose_position.z}&#39;
+                orientation = f&#39;x: {assembled_pose_orientation.x}\n\t\ty: {assembled_pose_orientation.y}\n\t\tz: {assembled_pose_orientation.z}\n\t\tw: {assembled_pose_orientation.w}&#39;
+                output += f&#39;\tPart: {part_color_emoji} {part_color} {part_type}\n&#39;
+                output += &#39;\tPosition:\n&#39;
+                output += f&#39;\t\t{position}\n&#39;
+                output += &#39;\tOrientation:\n&#39;
+                output += f&#39;\t\t{orientation}\n&#39;
+                output += f&#39;\tInstall direction: [{install_direction.x}, {install_direction.y}, {install_direction.z}]\n\n&#39;
+        else:
+            output += &#39;Type: Unknown\n&#39;
+        return output
+
+    def floor_robot_gripper_state_cb(self, msg: VacuumGripperState):
+        &#39;&#39;&#39;Callback for the topic /ariac/floor_robot_gripper_state
+
+        Arguments:
+            msg -- VacuumGripperState message
+        &#39;&#39;&#39;
+        self.floor_robot_gripper_state = msg
+
+    def set_floor_robot_gripper_state(self, state):
+        &#39;&#39;&#39;Set the gripper state of the floor robot.
+
+        Arguments:
+            state -- True to enable, False to disable
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        &#39;&#39;&#39;
+        if self.floor_robot_gripper_state.enabled == state:
+            self.get_logger().warn(f&#39;Gripper is already {self.gripper_states_[state]}&#39;)
+            return
+
+        request = VacuumGripperControl.Request()
+        request.enable = state
+
+        future = self.floor_gripper_enable.call_async(request)
+
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        if future.result().success:
+            self.get_logger().info(f&#39;Changed gripper state to {self.gripper_states_[state]}&#39;)
+        else:
+            self.get_logger().warn(&#39;Unable to change gripper state&#39;)
+
+    def wait(self, duration):
+        &#39;&#39;&#39;Wait for a specified duration.
+
+        Arguments:
+            duration -- Duration to wait in seconds
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        &#39;&#39;&#39;
+        start = self.get_clock().now()
+
+        while self.get_clock().now() &lt;= start + Duration(seconds=duration):
+            try:
+                rclpy.spin_once(self)
+            except KeyboardInterrupt as kb_error:
+                raise KeyboardInterrupt from kb_error
+
+    def lock_agv_tray(self, num):
+        &#39;&#39;&#39;Function to lock the tray of an AGV.
+
+        Arguments:
+            num -- AGV number
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        &#39;&#39;&#39;
+        tray_locker = self.create_client(
+            Trigger,
+            f&#39;/ariac/agv{num}_lock_tray&#39;
+        )
+
+        request = Trigger.Request()
+
+        future = tray_locker.call_async(request)
+
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        if future.result().success:
+            self.get_logger().info(f&#39;Locked AGV{num}\&#39;s tray&#39;)
+        else:
+            self.get_logger().warn(&#39;Unable to lock tray&#39;)
+
+    def move_agv_to_station(self, num, station):
+        &#39;&#39;&#39;Function to move an AGV to a station.
+
+        Arguments:
+            num -- AGV number
+
+            station -- Station to move to
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        &#39;&#39;&#39;
+        mover = self.create_client(
+            MoveAGV,
+            f&#39;/ariac/move_agv{num}&#39;)
+
+        request = MoveAGV.Request()
+
+        if station in [AssemblyTaskMsg.AS1, AssemblyTaskMsg.AS3]:
+            request.location = MoveAGV.Request.ASSEMBLY_FRONT
+        else:
+            request.location = MoveAGV.Request.ASSEMBLY_BACK
+
+        future = mover.call_async(request)
+
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        if future.result().success:
+            self.get_logger().info(f&#39;Moved AGV{num} to {self.stations_[station]}&#39;)
+        else:
+            self.get_logger().warn(future.result().message)
+
+    def move_robot_home(self, robot_name):
+        &#39;&#39;&#39;Move one of the robots to its home position.
+
+        Arguments:
+            robot_name -- Name of the robot to move home
+        &#39;&#39;&#39;
+        request = Trigger.Request()
+
+        if robot_name == &#39;floor_robot&#39;:
+            if not self.move_floor_robot_home.wait_for_service(timeout_sec=1.0):
+                self.get_logger().error(&#39;Robot commander node not running&#39;)
+                return
+
+            future = self.move_floor_robot_home.call_async(request)
+
+        elif robot_name == &#39;ceiling_robot&#39;:
+            if not self.move_ceiling_robot_home.wait_for_service(timeout_sec=1.0):
+                self.get_logger().error(&#39;Robot commander node not running&#39;)
+                return
+            future = self.move_ceiling_robot_home.call_async(request)
+        else:
+            self.get_logger().error(f&#39;Robot name: ({robot_name}) is not valid&#39;)
+            return
+
+        # Wait until the service call is completed
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result().success:
+            self.get_logger().info(f&#39;Moved {robot_name} to home position&#39;)
+        else:
+            self.get_logger().warn(future.result().message)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>rclpy.node.Node</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.competition_states_"><code class="name">var <span class="ident">competition_states_</span></code></dt>
+<dd>
+<div class="desc"><p>Dictionary for converting CompetitionState constants to strings</p></div>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.destinations_"><code class="name">var <span class="ident">destinations_</span></code></dt>
+<dd>
+<div class="desc"><p>Dictionary for converting AGVDestination constants to strings</p></div>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.gripper_states_"><code class="name">var <span class="ident">gripper_states_</span></code></dt>
+<dd>
+<div class="desc"><p>Dictionary for converting VacuumGripperState constants to strings</p></div>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.part_colors_"><code class="name">var <span class="ident">part_colors_</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.part_colors_emoji_"><code class="name">var <span class="ident">part_colors_emoji_</span></code></dt>
+<dd>
+<div class="desc"><p>Dictionary for converting PartColor constants to strings</p></div>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.part_types_"><code class="name">var <span class="ident">part_types_</span></code></dt>
+<dd>
+<div class="desc"><p>Dictionary for converting PartType constants to strings</p></div>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.stations_"><code class="name">var <span class="ident">stations_</span></code></dt>
+<dd>
+<div class="desc"><p>Dictionary for converting AssemblyTaskMsg constants to strings</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.advanced_camera0_cb"><code class="name flex">
+<span>def <span class="ident">advanced_camera0_cb</span></span>(<span>self, msg: ariac_msgs.msg._advanced_logical_camera_image.AdvancedLogicalCameraImage)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Callback for the topic /ariac/sensors/advanced_camera_0/image</p>
+<h2 id="arguments">Arguments</h2>
+<p>msg &ndash; AdvancedLogicalCameraImage message</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def advanced_camera0_cb(self, msg: AdvancedLogicalCameraImageMsg):
+    &#39;&#39;&#39;Callback for the topic /ariac/sensors/advanced_camera_0/image
+
+    Arguments:
+        msg -- AdvancedLogicalCameraImage message
+    &#39;&#39;&#39;
+    image = AdvancedLogicalCameraImage(msg)
+    self.camera_images.clear()
+    self.camera_images.append(image)</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.breakbeam0_cb"><code class="name flex">
+<span>def <span class="ident">breakbeam0_cb</span></span>(<span>self, msg: ariac_msgs.msg._break_beam_status.BreakBeamStatus)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Callback for the topic /ariac/sensors/breakbeam_0/status</p>
+<h2 id="arguments">Arguments</h2>
+<p>msg &ndash; BreakBeamStatus message</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def breakbeam0_cb(self, msg: BreakBeamStatus):
+    &#39;&#39;&#39;Callback for the topic /ariac/sensors/breakbeam_0/status
+
+    Arguments:
+        msg -- BreakBeamStatus message
+    &#39;&#39;&#39;
+    if not self.object_detected and msg.object_detected:
+        self.part_count += 1
+
+    self.object_detected = msg.object_detected</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.competition_state_cb"><code class="name flex">
+<span>def <span class="ident">competition_state_cb</span></span>(<span>self, msg: ariac_msgs.msg._competition_state.CompetitionState)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Callback for the topic /ariac/competition_state</p>
+<h2 id="arguments">Arguments</h2>
+<p>msg &ndash; CompetitionState message</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def competition_state_cb(self, msg: CompetitionState):
+    &#39;&#39;&#39;Callback for the topic /ariac/competition_state
+
+    Arguments:
+        msg -- CompetitionState message
+    &#39;&#39;&#39;
+    # Log if competition state has changed
+    if self.competition_state != msg.competition_state:
+        self.get_logger().info(
+            f&#39;Competition state is: \
+            {CompetitionInterface.competition_states_[msg.competition_state]}&#39;,
+            throttle_duration_sec=1.0)
+    self.competition_state = msg.competition_state</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.floor_robot_gripper_state_cb"><code class="name flex">
+<span>def <span class="ident">floor_robot_gripper_state_cb</span></span>(<span>self, msg: ariac_msgs.msg._vacuum_gripper_state.VacuumGripperState)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Callback for the topic /ariac/floor_robot_gripper_state</p>
+<h2 id="arguments">Arguments</h2>
+<p>msg &ndash; VacuumGripperState message</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def floor_robot_gripper_state_cb(self, msg: VacuumGripperState):
+    &#39;&#39;&#39;Callback for the topic /ariac/floor_robot_gripper_state
+
+    Arguments:
+        msg -- VacuumGripperState message
+    &#39;&#39;&#39;
+    self.floor_robot_gripper_state = msg</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.lock_agv_tray"><code class="name flex">
+<span>def <span class="ident">lock_agv_tray</span></span>(<span>self, num)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to lock the tray of an AGV.</p>
+<h2 id="arguments">Arguments</h2>
+<p>num &ndash; AGV number</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyboardInterrupt</code></dt>
+<dd>Exception raised when the user presses Ctrl+C</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lock_agv_tray(self, num):
+    &#39;&#39;&#39;Function to lock the tray of an AGV.
+
+    Arguments:
+        num -- AGV number
+
+    Raises:
+        KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+    &#39;&#39;&#39;
+    tray_locker = self.create_client(
+        Trigger,
+        f&#39;/ariac/agv{num}_lock_tray&#39;
+    )
+
+    request = Trigger.Request()
+
+    future = tray_locker.call_async(request)
+
+    try:
+        rclpy.spin_until_future_complete(self, future)
+    except KeyboardInterrupt as kb_error:
+        raise KeyboardInterrupt from kb_error
+
+    if future.result().success:
+        self.get_logger().info(f&#39;Locked AGV{num}\&#39;s tray&#39;)
+    else:
+        self.get_logger().warn(&#39;Unable to lock tray&#39;)</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.move_agv_to_station"><code class="name flex">
+<span>def <span class="ident">move_agv_to_station</span></span>(<span>self, num, station)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to move an AGV to a station.</p>
+<h2 id="arguments">Arguments</h2>
+<p>num &ndash; AGV number</p>
+<p>station &ndash; Station to move to</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyboardInterrupt</code></dt>
+<dd>Exception raised when the user presses Ctrl+C</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def move_agv_to_station(self, num, station):
+    &#39;&#39;&#39;Function to move an AGV to a station.
+
+    Arguments:
+        num -- AGV number
+
+        station -- Station to move to
+
+    Raises:
+        KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+    &#39;&#39;&#39;
+    mover = self.create_client(
+        MoveAGV,
+        f&#39;/ariac/move_agv{num}&#39;)
+
+    request = MoveAGV.Request()
+
+    if station in [AssemblyTaskMsg.AS1, AssemblyTaskMsg.AS3]:
+        request.location = MoveAGV.Request.ASSEMBLY_FRONT
+    else:
+        request.location = MoveAGV.Request.ASSEMBLY_BACK
+
+    future = mover.call_async(request)
+
+    try:
+        rclpy.spin_until_future_complete(self, future)
+    except KeyboardInterrupt as kb_error:
+        raise KeyboardInterrupt from kb_error
+
+    if future.result().success:
+        self.get_logger().info(f&#39;Moved AGV{num} to {self.stations_[station]}&#39;)
+    else:
+        self.get_logger().warn(future.result().message)</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.move_robot_home"><code class="name flex">
+<span>def <span class="ident">move_robot_home</span></span>(<span>self, robot_name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Move one of the robots to its home position.</p>
+<h2 id="arguments">Arguments</h2>
+<p>robot_name &ndash; Name of the robot to move home</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def move_robot_home(self, robot_name):
+    &#39;&#39;&#39;Move one of the robots to its home position.
+
+    Arguments:
+        robot_name -- Name of the robot to move home
+    &#39;&#39;&#39;
+    request = Trigger.Request()
+
+    if robot_name == &#39;floor_robot&#39;:
+        if not self.move_floor_robot_home.wait_for_service(timeout_sec=1.0):
+            self.get_logger().error(&#39;Robot commander node not running&#39;)
+            return
+
+        future = self.move_floor_robot_home.call_async(request)
+
+    elif robot_name == &#39;ceiling_robot&#39;:
+        if not self.move_ceiling_robot_home.wait_for_service(timeout_sec=1.0):
+            self.get_logger().error(&#39;Robot commander node not running&#39;)
+            return
+        future = self.move_ceiling_robot_home.call_async(request)
+    else:
+        self.get_logger().error(f&#39;Robot name: ({robot_name}) is not valid&#39;)
+        return
+
+    # Wait until the service call is completed
+    rclpy.spin_until_future_complete(self, future)
+
+    if future.result().success:
+        self.get_logger().info(f&#39;Moved {robot_name} to home position&#39;)
+    else:
+        self.get_logger().warn(future.result().message)</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.multiply_pose"><code class="name flex">
+<span>def <span class="ident">multiply_pose</span></span>(<span>self, pose1: geometry_msgs.msg._pose.Pose, pose2: geometry_msgs.msg._pose.Pose)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Use KDL to multiply two poses together.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>pose1</code></strong> :&ensp;<code>Pose</code></dt>
+<dd>Pose of the first frame</dd>
+<dt><strong><code>pose2</code></strong> :&ensp;<code>Pose</code></dt>
+<dd>Pose of the second frame</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Pose</code></dt>
+<dd>Pose of the resulting frame</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def multiply_pose(self, pose1: Pose, pose2: Pose):
+    &#39;&#39;&#39;
+    Use KDL to multiply two poses together.
+
+    Args:
+        pose1 (Pose): Pose of the first frame
+        pose2 (Pose): Pose of the second frame
+
+    Returns:
+        Pose: Pose of the resulting frame
+    &#39;&#39;&#39;
+    
+    frame1 = PyKDL.Frame(PyKDL.Rotation.Quaternion(pose1.orientation.x, pose1.orientation.y, pose1.orientation.z, pose1.orientation.w), PyKDL.Vector(pose1.position.x, pose1.position.y, pose1.position.z))
+    frame2 = PyKDL.Frame(PyKDL.Rotation.Quaternion(pose2.orientation.x, pose2.orientation.y, pose2.orientation.z, pose2.orientation.w), PyKDL.Vector(pose2.position.x, pose2.position.y, pose2.position.z))
+    
+    frame3: PyKDL.Frame = frame1 * frame2
+    
+    # return the resulting pose from frame3
+    tf2 = Pose()
+    tf2.position.x = frame3.p.x()
+    tf2.position.y = frame3.p.y()
+    tf2.position.z = frame3.p.z()
+    tf2.orientation.x = frame3.M.GetQuaternion()[0]
+    tf2.orientation.y = frame3.M.GetQuaternion()[1]
+    tf2.orientation.z = frame3.M.GetQuaternion()[2]
+    tf2.orientation.w = frame3.M.GetQuaternion()[3]
+    
+    return tf2</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.orders_cb"><code class="name flex">
+<span>def <span class="ident">orders_cb</span></span>(<span>self, msg: <a title="ariac_tutorials.competition_interface.Order" href="#ariac_tutorials.competition_interface.Order">Order</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Callback for the topic /ariac/orders</p>
+<h2 id="arguments">Arguments</h2>
+<p>msg &ndash; Order message</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def orders_cb(self, msg: Order):
+    &#39;&#39;&#39;Callback for the topic /ariac/orders
+
+    Arguments:
+        msg -- Order message
+    &#39;&#39;&#39;
+    order = Order(msg)
+    self.orders.append(order)
+    if self.parse_incoming_order:
+        self.get_logger().info(self.parse_order(order))</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.parse_advanced_camera_image"><code class="name flex">
+<span>def <span class="ident">parse_advanced_camera_image</span></span>(<span>self, image: <a title="ariac_tutorials.competition_interface.AdvancedLogicalCameraImage" href="#ariac_tutorials.competition_interface.AdvancedLogicalCameraImage">AdvancedLogicalCameraImage</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parse an AdvancedLogicalCameraImage message and return a string representation.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image</code></strong> :&ensp;<code><a title="ariac_tutorials.competition_interface.AdvancedLogicalCameraImage" href="#ariac_tutorials.competition_interface.AdvancedLogicalCameraImage">AdvancedLogicalCameraImage</a></code></dt>
+<dd>Object of type AdvancedLogicalCameraImage</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_advanced_camera_image(self, image: AdvancedLogicalCameraImage):
+    &#39;&#39;&#39;
+    Parse an AdvancedLogicalCameraImage message and return a string representation.
+
+
+    Args:
+        image (AdvancedLogicalCameraImage): Object of type AdvancedLogicalCameraImage
+    &#39;&#39;&#39;
+    output = &#39;\n\n==========================\n&#39;
+    
+    sensor_pose: Pose = image.sensor_pose
+    
+    part_pose: PartPoseMsg
+    for part_pose in image.part_poses:
+        part_color = CompetitionInterface.part_colors_[part_pose.part.color].capitalize()
+        part_color_emoji = CompetitionInterface.part_colors_emoji_[part_pose.part.color]
+        part_type = CompetitionInterface.part_types_[part_pose.part.type].capitalize()
+        output += f&#39;Part: {part_color_emoji} {part_color} {part_type}\n&#39;
+        output += &#39;==========================\n&#39;
+        output += &#39;Camera Frame\n&#39;
+        output += &#39;==========================\n&#39;
+        position = f&#39;x: {part_pose.pose.position.x}\n\t\ty: {part_pose.pose.position.y}\n\t\tz: {part_pose.pose.position.z}&#39;
+        orientation = f&#39;x: {part_pose.pose.orientation.x}\n\t\ty: {part_pose.pose.orientation.y}\n\t\tz: {part_pose.pose.orientation.z}\n\t\tw: {part_pose.pose.orientation.w}&#39;
+
+        output += &#39;\tPosition:\n&#39;
+        output += f&#39;\t\t{position}\n&#39;
+        output += &#39;\tOrientation:\n&#39;
+        output += f&#39;\t\t{orientation}\n&#39;
+        output += &#39;==========================\n&#39;
+        output += &#39;World Frame\n&#39;
+        output += &#39;==========================\n&#39;
+        part_world_pose = self.multiply_pose(sensor_pose, part_pose.pose)
+        position = f&#39;x: {part_world_pose.position.x}\n\t\ty: {part_world_pose.position.y}\n\t\tz: {part_world_pose.position.z}&#39;
+        orientation = f&#39;x: {part_world_pose.orientation.x}\n\t\ty: {part_world_pose.orientation.y}\n\t\tz: {part_world_pose.orientation.z}\n\t\tw: {part_world_pose.orientation.w}&#39;
+
+        output += &#39;\tPosition:\n&#39;
+        output += f&#39;\t\t{position}\n&#39;
+        output += &#39;\tOrientation:\n&#39;
+        output += f&#39;\t\t{orientation}\n&#39;
+        output += &#39;==========================\n&#39;
+    
+    return output</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.parse_order"><code class="name flex">
+<span>def <span class="ident">parse_order</span></span>(<span>self, order: <a title="ariac_tutorials.competition_interface.Order" href="#ariac_tutorials.competition_interface.Order">Order</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parse an order message and return a string representation.</p>
+<h2 id="args">Args</h2>
+<p>order &ndash; Order message</p>
+<h2 id="returns">Returns</h2>
+<p>String representation of the order message</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_order(self, order: Order):
+    &#39;&#39;&#39;Parse an order message and return a string representation.
+
+    Args:
+        order -- Order message
+
+    Returns:
+        String representation of the order message
+    &#39;&#39;&#39;
+    output = &#39;\n\n==========================\n&#39;
+    output += f&#39;Received Order: {order.order_id}\n&#39;
+    output += f&#39;Priority: {order.order_priority}\n&#39;
+
+    if order.order_type == OrderMsg.KITTING:
+        kitting_task: KittingTask = order.order_task
+        output += &#39;Type: Kitting\n&#39;
+        output += &#39;==========================\n&#39;
+        output += f&#39;AGV: {kitting_task.agv_number}\n&#39;
+        output += f&#39;Destination: {self.destinations_[kitting_task.destination]}\n&#39;
+        output += f&#39;Tray ID: {kitting_task.tray_id}\n&#39;
+        output += &#39;Products:\n&#39;
+        output += &#39;==========================\n&#39;
+
+        quadrants = {1: &#34;Quadrant 1: -&#34;,
+                     2: &#34;Quadrant 2: -&#34;,
+                     3: &#34;Quadrant 3: -&#34;,
+                     4: &#34;Quadrant 4: -&#34;}
+
+        for i in range(1, 5):
+            product: KittingPartMsg
+            for product in kitting_task.parts:
+                if i == product.quadrant:
+                    part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+                    part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+                    part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+                    quadrants[i] = f&#39;Quadrant {i}: {part_color_emoji} {part_color} {part_type}&#39;
+        output += f&#39;\t{quadrants[1]}\n&#39;
+        output += f&#39;\t{quadrants[2]}\n&#39;
+        output += f&#39;\t{quadrants[3]}\n&#39;
+        output += f&#39;\t{quadrants[4]}\n&#39;
+
+    elif order.order_type == OrderMsg.ASSEMBLY:
+        assembly_task: AssemblyTask = order.order_task
+        output += &#39;Type: Assembly\n&#39;
+        output += &#39;==========================\n&#39;
+        if len(assembly_task.agv_numbers) == 1:
+            output += f&#39;AGV: {assembly_task.agv_number[0]}\n&#39;
+        elif len(assembly_task.agv_numbers) == 2:
+            output += f&#39;AGV(s): [{assembly_task.agv_numbers[0]}, {assembly_task.agv_numbers[1]}]\n&#39;
+        output += f&#39;Assembly station: {self.destinations_[assembly_task.station].title()}\n&#39;
+        output += &#39;Products:\n&#39;
+        output += &#39;==========================\n&#39;
+
+        product: AssemblyPartMsg
+        for product in assembly_task.parts:
+            part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+            part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+            part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+            assembled_pose_position = product.assembled_pose.pose.position
+            assembled_pose_orientation = product.assembled_pose.pose.orientation
+            install_direction = product.install_direction
+            position = f&#39;x: {assembled_pose_position.x}\n\t\ty: {assembled_pose_position.y}\n\t\tz: {assembled_pose_position.z}&#39;
+            orientation = f&#39;x: {assembled_pose_orientation.x}\n\t\ty: {assembled_pose_orientation.y}\n\t\tz: {assembled_pose_orientation.z}\n\t\tw: {assembled_pose_orientation.w}&#39;
+            output += f&#39;\tPart: {part_color_emoji} {part_color} {part_type}\n&#39;
+            output += &#39;\tPosition:\n&#39;
+            output += f&#39;\t\t{position}\n&#39;
+            output += &#39;\tOrientation:\n&#39;
+            output += f&#39;\t\t{orientation}\n&#39;
+            output += f&#39;\tInstall direction: [{install_direction.x}, {install_direction.y}, {install_direction.z}]\n\n&#39;
+    
+    elif order.order_type == OrderMsg.COMBINED:
+        combined_task: CombinedTask = order.order_task
+        output += &#39;Type: Combined\n&#39;
+        output += &#39;==========================\n&#39;
+        output += f&#39;Assembly station: {self.destinations_[combined_task.station].title()}\n&#39;
+        output += &#39;Products:\n&#39;
+        output += &#39;==========================\n&#39;
+
+        product: AssemblyPartMsg
+        for product in combined_task.parts:
+            part_color = CompetitionInterface.part_colors_[product.part_color].capitalize()
+            part_color_emoji = CompetitionInterface.part_colors_emoji_[product.part_color]
+            part_type = CompetitionInterface.part_types_[product.part_type].capitalize()
+            assembled_pose_position = product.assembled_pose.pose.position
+            assembled_pose_orientation = product.assembled_pose.pose.orientation
+            install_direction = product.install_direction
+            position = f&#39;x: {assembled_pose_position.x}\n\t\ty: {assembled_pose_position.y}\n\t\tz: {assembled_pose_position.z}&#39;
+            orientation = f&#39;x: {assembled_pose_orientation.x}\n\t\ty: {assembled_pose_orientation.y}\n\t\tz: {assembled_pose_orientation.z}\n\t\tw: {assembled_pose_orientation.w}&#39;
+            output += f&#39;\tPart: {part_color_emoji} {part_color} {part_type}\n&#39;
+            output += &#39;\tPosition:\n&#39;
+            output += f&#39;\t\t{position}\n&#39;
+            output += &#39;\tOrientation:\n&#39;
+            output += f&#39;\t\t{orientation}\n&#39;
+            output += f&#39;\tInstall direction: [{install_direction.x}, {install_direction.y}, {install_direction.z}]\n\n&#39;
+    else:
+        output += &#39;Type: Unknown\n&#39;
+    return output</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.set_floor_robot_gripper_state"><code class="name flex">
+<span>def <span class="ident">set_floor_robot_gripper_state</span></span>(<span>self, state)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the gripper state of the floor robot.</p>
+<h2 id="arguments">Arguments</h2>
+<p>state &ndash; True to enable, False to disable</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyboardInterrupt</code></dt>
+<dd>Exception raised when the user presses Ctrl+C</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_floor_robot_gripper_state(self, state):
+    &#39;&#39;&#39;Set the gripper state of the floor robot.
+
+    Arguments:
+        state -- True to enable, False to disable
+
+    Raises:
+        KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+    &#39;&#39;&#39;
+    if self.floor_robot_gripper_state.enabled == state:
+        self.get_logger().warn(f&#39;Gripper is already {self.gripper_states_[state]}&#39;)
+        return
+
+    request = VacuumGripperControl.Request()
+    request.enable = state
+
+    future = self.floor_gripper_enable.call_async(request)
+
+    try:
+        rclpy.spin_until_future_complete(self, future)
+    except KeyboardInterrupt as kb_error:
+        raise KeyboardInterrupt from kb_error
+
+    if future.result().success:
+        self.get_logger().info(f&#39;Changed gripper state to {self.gripper_states_[state]}&#39;)
+    else:
+        self.get_logger().warn(&#39;Unable to change gripper state&#39;)</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.start_competition"><code class="name flex">
+<span>def <span class="ident">start_competition</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to start the competition.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start_competition(self):
+    &#39;&#39;&#39;Function to start the competition.
+    &#39;&#39;&#39;
+    self.get_logger().info(&#39;Waiting for competition to be ready&#39;)
+
+    # Wait for competition to be ready
+    while self.competition_state != CompetitionState.READY:
+        try:
+            rclpy.spin_once(self)
+        except KeyboardInterrupt:
+            return
+
+    self.get_logger().info(&#39;Competition is ready. Starting...&#39;)
+
+    # Call ROS service to start competition
+    while not self.starter.wait_for_service(timeout_sec=1.0):
+        self.get_logger().info(&#39;Waiting for /ariac/start_competition to be available...&#39;)
+
+    # Create trigger request and call starter service
+    request = Trigger.Request()
+    future = self.starter.call_async(request)
+
+    # Wait until the service call is completed
+    rclpy.spin_until_future_complete(self, future)
+
+    if future.result().success:
+        self.get_logger().info(&#39;Started competition.&#39;)
+    else:
+        self.get_logger().info(&#39;Unable to start competition&#39;)</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.CompetitionInterface.wait"><code class="name flex">
+<span>def <span class="ident">wait</span></span>(<span>self, duration)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Wait for a specified duration.</p>
+<h2 id="arguments">Arguments</h2>
+<p>duration &ndash; Duration to wait in seconds</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyboardInterrupt</code></dt>
+<dd>Exception raised when the user presses Ctrl+C</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait(self, duration):
+    &#39;&#39;&#39;Wait for a specified duration.
+
+    Arguments:
+        duration -- Duration to wait in seconds
+
+    Raises:
+        KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+    &#39;&#39;&#39;
+    start = self.get_clock().now()
+
+    while self.get_clock().now() &lt;= start + Duration(seconds=duration):
+        try:
+            rclpy.spin_once(self)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="ariac_tutorials.competition_interface.KittingPart"><code class="flex name class">
+<span>class <span class="ident">KittingPart</span></span>
+<span>(</span><span>quadrant: int, part_type: int, part_color: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to store information about a KittingPartMsg.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class KittingPart:
+    &#39;&#39;&#39;
+    Class to store information about a KittingPartMsg.
+    &#39;&#39;&#39;
+    quadrant: int
+    part_type: int
+    part_color: int</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="ariac_tutorials.competition_interface.KittingPart.part_color"><code class="name">var <span class="ident">part_color</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="ariac_tutorials.competition_interface.KittingPart.part_type"><code class="name">var <span class="ident">part_type</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="ariac_tutorials.competition_interface.KittingPart.quadrant"><code class="name">var <span class="ident">quadrant</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="ariac_tutorials.competition_interface.KittingTask"><code class="flex name class">
+<span>class <span class="ident">KittingTask</span></span>
+<span>(</span><span>kitting_task_msg: ariac_msgs.msg._kitting_task.KittingTask)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to store information about a KittingTaskMsg.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class KittingTask:
+    &#39;&#39;&#39;
+    Class to store information about a KittingTaskMsg.
+    &#39;&#39;&#39;
+    def __init__(self, kitting_task_msg: KittingTaskMsg) -&gt; None:
+        self.agv_number = kitting_task_msg.agv_number
+        self.tray_id = kitting_task_msg.tray_id
+        self.destination = kitting_task_msg.destination
+        # list of KittingPart objects
+        self.parts = list(map(lambda x: KittingPart(x.quadrant, x.part.type, x.part.color), kitting_task_msg.parts))
+        # self.parts = list(map(lambda x: KittingPart(x), kitting_task_msg.parts))</code></pre>
+</details>
+</dd>
+<dt id="ariac_tutorials.competition_interface.Order"><code class="flex name class">
+<span>class <span class="ident">Order</span></span>
+<span>(</span><span>msg: ariac_msgs.msg._order.Order)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Order class for storing order information from the topic /ariac/orders.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Order:
+    &#39;&#39;&#39; Order class for storing order information from the topic /ariac/orders.
+    &#39;&#39;&#39;
+
+    def __init__(self, msg: OrderMsg) -&gt; None:
+        self.order_id = msg.id
+        self.order_type = msg.type
+        self.order_priority = msg.priority
+
+        if self.order_type == OrderMsg.KITTING:
+            self.order_task = KittingTask(msg.kitting_task)
+        elif self.order_type == OrderMsg.ASSEMBLY:
+            self.order_task = AssemblyTask(msg.assembly_task)
+        elif self.order_type == OrderMsg.COMBINED:
+            self.order_task = CombinedTask(msg.combined_task)
+        else:
+            self.order_task = None</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ariac_tutorials" href="index.html">ariac_tutorials</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ariac_tutorials.competition_interface.AdvancedLogicalCameraImage" href="#ariac_tutorials.competition_interface.AdvancedLogicalCameraImage">AdvancedLogicalCameraImage</a></code></h4>
+</li>
+<li>
+<h4><code><a title="ariac_tutorials.competition_interface.AssemblyPart" href="#ariac_tutorials.competition_interface.AssemblyPart">AssemblyPart</a></code></h4>
+</li>
+<li>
+<h4><code><a title="ariac_tutorials.competition_interface.AssemblyTask" href="#ariac_tutorials.competition_interface.AssemblyTask">AssemblyTask</a></code></h4>
+</li>
+<li>
+<h4><code><a title="ariac_tutorials.competition_interface.CombinedTask" href="#ariac_tutorials.competition_interface.CombinedTask">CombinedTask</a></code></h4>
+</li>
+<li>
+<h4><code><a title="ariac_tutorials.competition_interface.CompetitionInterface" href="#ariac_tutorials.competition_interface.CompetitionInterface">CompetitionInterface</a></code></h4>
+<ul class="">
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.advanced_camera0_cb" href="#ariac_tutorials.competition_interface.CompetitionInterface.advanced_camera0_cb">advanced_camera0_cb</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.breakbeam0_cb" href="#ariac_tutorials.competition_interface.CompetitionInterface.breakbeam0_cb">breakbeam0_cb</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.competition_state_cb" href="#ariac_tutorials.competition_interface.CompetitionInterface.competition_state_cb">competition_state_cb</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.competition_states_" href="#ariac_tutorials.competition_interface.CompetitionInterface.competition_states_">competition_states_</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.destinations_" href="#ariac_tutorials.competition_interface.CompetitionInterface.destinations_">destinations_</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.floor_robot_gripper_state_cb" href="#ariac_tutorials.competition_interface.CompetitionInterface.floor_robot_gripper_state_cb">floor_robot_gripper_state_cb</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.gripper_states_" href="#ariac_tutorials.competition_interface.CompetitionInterface.gripper_states_">gripper_states_</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.lock_agv_tray" href="#ariac_tutorials.competition_interface.CompetitionInterface.lock_agv_tray">lock_agv_tray</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.move_agv_to_station" href="#ariac_tutorials.competition_interface.CompetitionInterface.move_agv_to_station">move_agv_to_station</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.move_robot_home" href="#ariac_tutorials.competition_interface.CompetitionInterface.move_robot_home">move_robot_home</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.multiply_pose" href="#ariac_tutorials.competition_interface.CompetitionInterface.multiply_pose">multiply_pose</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.orders_cb" href="#ariac_tutorials.competition_interface.CompetitionInterface.orders_cb">orders_cb</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.parse_advanced_camera_image" href="#ariac_tutorials.competition_interface.CompetitionInterface.parse_advanced_camera_image">parse_advanced_camera_image</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.parse_order" href="#ariac_tutorials.competition_interface.CompetitionInterface.parse_order">parse_order</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.part_colors_" href="#ariac_tutorials.competition_interface.CompetitionInterface.part_colors_">part_colors_</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.part_colors_emoji_" href="#ariac_tutorials.competition_interface.CompetitionInterface.part_colors_emoji_">part_colors_emoji_</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.part_types_" href="#ariac_tutorials.competition_interface.CompetitionInterface.part_types_">part_types_</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.set_floor_robot_gripper_state" href="#ariac_tutorials.competition_interface.CompetitionInterface.set_floor_robot_gripper_state">set_floor_robot_gripper_state</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.start_competition" href="#ariac_tutorials.competition_interface.CompetitionInterface.start_competition">start_competition</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.stations_" href="#ariac_tutorials.competition_interface.CompetitionInterface.stations_">stations_</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.CompetitionInterface.wait" href="#ariac_tutorials.competition_interface.CompetitionInterface.wait">wait</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="ariac_tutorials.competition_interface.KittingPart" href="#ariac_tutorials.competition_interface.KittingPart">KittingPart</a></code></h4>
+<ul class="">
+<li><code><a title="ariac_tutorials.competition_interface.KittingPart.part_color" href="#ariac_tutorials.competition_interface.KittingPart.part_color">part_color</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.KittingPart.part_type" href="#ariac_tutorials.competition_interface.KittingPart.part_type">part_type</a></code></li>
+<li><code><a title="ariac_tutorials.competition_interface.KittingPart.quadrant" href="#ariac_tutorials.competition_interface.KittingPart.quadrant">quadrant</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="ariac_tutorials.competition_interface.KittingTask" href="#ariac_tutorials.competition_interface.KittingTask">KittingTask</a></code></h4>
+</li>
+<li>
+<h4><code><a title="ariac_tutorials.competition_interface.Order" href="#ariac_tutorials.competition_interface.Order">Order</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

@@ -18,7 +18,8 @@ ament_python_install_package(${PROJECT_NAME} SCRIPTS_DESTINATION lib/${PROJECT_N
 # Install Python executables
 install(PROGRAMS
   nodes/start_competition.py
-  nodes/read_sensor.py
+  nodes/read_break_beam_sensor.py
+  nodes/read_advanced_camera.py
   nodes/read_orders.py
   nodes/change_gripper_state.py
   nodes/move_robots.py
