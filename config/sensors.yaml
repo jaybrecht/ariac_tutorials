@@ -5,3 +5,15 @@ sensors:
     pose:
       xyz: [-0.36, 3.5, 0.88]
       rpy: [0, 0, pi]
+  advanced_camera_0:
+    type: advanced_logical_camera
+    visualize_fov: true
+    pose:
+      xyz: [-2.286, 2.96, 1.8]
+      rpy: [pi, pi/2, 0]
+  basic_camera_0:
+    type: basic_logical_camera
+    visualize_fov: true
+    pose:
+      xyz: [-2.286, -2.96, 1.8]
+      rpy: [pi, pi/2, 0]
