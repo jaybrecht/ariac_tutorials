@@ -8,10 +8,17 @@ from rclpy.node import Node
 from rclpy.parameter import Parameter
 from rclpy.qos import qos_profile_sensor_data
 
+import PyKDL
+
 from ariac_msgs.msg import (
     CompetitionState,
     BreakBeamStatus,
+    Part,
+    PartPose,
+    AdvancedLogicalCameraImage,
 )
+
+from geometry_msgs.msg import Pose
 
 from std_srvs.srv import Trigger
 
@@ -36,6 +43,32 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for converting CompetitionState constants to strings'''
 
+    part_colors_ = {
+        Part.RED: 'red',
+        Part.BLUE: 'blue',
+        Part.GREEN: 'green',
+        Part.ORANGE: 'orange',
+        Part.PURPLE: 'purple',
+    }
+    '''Dictionary for converting PartColor constants to strings'''
+
+    part_colors_emoji_ = {
+        Part.RED: '🟥',
+        Part.BLUE: '🟦',
+        Part.GREEN: '🟩',
+        Part.ORANGE: '🟧',
+        Part.PURPLE: '🟪',
+    }
+    '''Dictionary for displaying an emoji for the part color'''
+
+    part_types_ = {
+        Part.BATTERY: 'battery',
+        Part.PUMP: 'pump',
+        Part.REGULATOR: 'regulator',
+        Part.SENSOR: 'sensor',
+    }
+    '''Dictionary for converting PartType constants to strings'''
+
     def __init__(self):
         super().__init__('competition_interface')
 
@@ -56,6 +89,12 @@ class CompetitionInterface(Node):
         # Counter of parts on the conveyor
         self.conveyor_part_count = 0
 
+        # Flag for initial receipt of camera image
+        self.received_data_from_camera = False
+
+        # Camera Image
+        self.camera_image = AdvancedLogicalCameraImage()
+
         # Subscriber to the competition state topic
         self.subscription = self.create_subscription(
             CompetitionState,
@@ -68,6 +107,13 @@ class CompetitionInterface(Node):
             BreakBeamStatus,
             '/ariac/sensors/breakbeam_0/status',
             self.breakbeam0_cb,
+            qos_profile_sensor_data)
+
+        # Subscriber to the logical camera topic
+        self.advanced_camera0_sub = self.create_subscription(
+            AdvancedLogicalCameraImage,
+            '/ariac/sensors/advanced_camera_0/image',
+            self.advanced_camera0_cb,
             qos_profile_sensor_data)
 
         # Service client for starting the competition
@@ -133,3 +179,101 @@ class CompetitionInterface(Node):
 
         # Store the last reading from the sensor
         self.conveyor_object_detected = msg.object_detected
+
+    def advanced_camera0_cb(self, msg: AdvancedLogicalCameraImage):
+        '''Callback for the topic /ariac/sensors/advanced_camera_0/image
+        Arguments:
+            msg -- AdvancedLogicalCameraImage message
+        '''
+        
+        self.received_data_from_camera = True
+        self.camera_image = msg
+
+    def multiply_pose(self, pose1: Pose, pose2: Pose) -> Pose:
+        '''
+        Use KDL to multiply two poses together.
+        Args:
+            pose1 (Pose): Pose of the first frame
+            pose2 (Pose): Pose of the second frame
+        Returns:
+            Pose: Pose of the resulting frame
+        '''
+
+        frame1 = PyKDL.Frame(
+            PyKDL.Rotation.Quaternion(pose1.orientation.x,
+                                      pose1.orientation.y,
+                                      pose1.orientation.z,
+                                      pose1.orientation.w),
+            PyKDL.Vector(pose1.position.x, 
+                         pose1.position.y, 
+                         pose1.position.z))
+        
+        frame2 = PyKDL.Frame(
+            PyKDL.Rotation.Quaternion(pose2.orientation.x,
+                                      pose2.orientation.y,
+                                      pose2.orientation.z,
+                                      pose2.orientation.w),
+            PyKDL.Vector(pose2.position.x, 
+                         pose2.position.y, 
+                         pose2.position.z))
+
+        frame3 = frame1 * frame2
+
+        # return the resulting pose from frame3
+        pose = Pose()
+        pose.position.x = frame3.p.x()
+        pose.position.y = frame3.p.y()
+        pose.position.z = frame3.p.z()
+
+        q = frame3.M.GetQuaternion()
+        pose.orientation.x = q[0]
+        pose.orientation.y = q[1]
+        pose.orientation.z = q[2]
+        pose.orientation.w = q[3]
+
+        return pose
+
+    def parse_advanced_camera_image(self, image: AdvancedLogicalCameraImage):
+        '''
+        Parse an AdvancedLogicalCameraImage message and return a string representation.
+
+        Args:
+            image (AdvancedLogicalCameraImage): Object of type AdvancedLogicalCameraImage
+        '''
+        output = '\n\n==========================\n'
+
+        sensor_pose: Pose = image.sensor_pose
+
+        part_pose: PartPose
+        for part_pose in image.part_poses:
+            part_color = CompetitionInterface.part_colors_[
+                part_pose.part.color].capitalize()
+            part_color_emoji = CompetitionInterface.part_colors_emoji_[
+                part_pose.part.color]
+            part_type = CompetitionInterface.part_types_[
+                part_pose.part.type].capitalize()
+            output += f'Part: {part_color_emoji} {part_color} {part_type}\n'
+            output += '==========================\n'
+            output += 'Camera Frame\n'
+            output += '==========================\n'
+            position = f'x: {part_pose.pose.position.x}\n\t\ty: {part_pose.pose.position.y}\n\t\tz: {part_pose.pose.position.z}'
+            orientation = f'x: {part_pose.pose.orientation.x}\n\t\ty: {part_pose.pose.orientation.y}\n\t\tz: {part_pose.pose.orientation.z}\n\t\tw: {part_pose.pose.orientation.w}'
+
+            output += '\tPosition:\n'
+            output += f'\t\t{position}\n'
+            output += '\tOrientation:\n'
+            output += f'\t\t{orientation}\n'
+            output += '==========================\n'
+            output += 'World Frame\n'
+            output += '==========================\n'
+            part_world_pose = self.multiply_pose(sensor_pose, part_pose.pose)
+            position = f'x: {part_world_pose.position.x}\n\t\ty: {part_world_pose.position.y}\n\t\tz: {part_world_pose.position.z}'
+            orientation = f'x: {part_world_pose.orientation.x}\n\t\ty: {part_world_pose.orientation.y}\n\t\tz: {part_world_pose.orientation.z}\n\t\tw: {part_world_pose.orientation.w}'
+
+            output += '\tPosition:\n'
+            output += f'\t\t{position}\n'
+            output += '\tOrientation:\n'
+            output += f'\t\t{orientation}\n'
+            output += '==========================\n'
+
+        return output

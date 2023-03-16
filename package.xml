@@ -13,6 +13,7 @@
   <depend>rclpy</depend>
   <depend>ariac_msgs</depend>
   <depend>geometry_msgs</depend>
+  <depend>orocos_kdl</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

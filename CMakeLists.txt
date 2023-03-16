@@ -10,6 +10,7 @@ find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(ariac_msgs REQUIRED)
+find_package(orocos_kdl REQUIRED)
 
 # Install the config directory to the package share directory
 install(DIRECTORY 
@@ -24,6 +25,7 @@ ament_python_install_package(${PROJECT_NAME} SCRIPTS_DESTINATION lib/${PROJECT_N
 install(PROGRAMS
   nodes/tutorial_1.py
   nodes/tutorial_2.py
+  nodes/tutorial_3.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
