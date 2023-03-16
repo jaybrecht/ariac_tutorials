@@ -10,7 +10,6 @@ find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(ariac_msgs REQUIRED)
-find_package(moveit_ros_planning_interface REQUIRED)
 
 # Install Python modules
 ament_python_install_package(${PROJECT_NAME} SCRIPTS_DESTINATION lib/${PROJECT_NAME})
@@ -18,33 +17,7 @@ ament_python_install_package(${PROJECT_NAME} SCRIPTS_DESTINATION lib/${PROJECT_N
 # Install Python executables
 install(PROGRAMS
   nodes/start_competition.py
-  nodes/read_break_beam_sensor.py
-  nodes/read_advanced_camera.py
-  nodes/read_orders.py
-  nodes/change_gripper_state.py
-  nodes/move_robots.py
-  nodes/move_agv.py
   DESTINATION lib/${PROJECT_NAME}
 )
-
-# Install the config directory to the package share directory
-install(DIRECTORY 
-  config
-  launch
-  DESTINATION share/${PROJECT_NAME}
-)
-
-# Install C++ executables
-add_executable(robot_commander 
-  src/robot_commander.cpp)
-
-ament_target_dependencies(robot_commander 
-  rclcpp
-  moveit_ros_planning_interface 
-  ariac_msgs)
-
-install(TARGETS
-  robot_commander
-  DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

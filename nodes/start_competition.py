@@ -2,7 +2,7 @@
 '''
 Example script to start the competition.
 
-To test this script, run the following command:
+To test this script, run the following commands in separate terminals:
 
 - ros2 launch ariac_gazebo ariac.launch.py trial_name:=tutorial
 - ros2 run ariac_tutorials start_competition.py
