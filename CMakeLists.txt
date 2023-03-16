@@ -16,7 +16,7 @@ ament_python_install_package(${PROJECT_NAME} SCRIPTS_DESTINATION lib/${PROJECT_N
 
 # Install Python executables
 install(PROGRAMS
-  nodes/start_competition.py
+  nodes/tutorial_1.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
