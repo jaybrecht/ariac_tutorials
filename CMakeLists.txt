@@ -11,12 +11,19 @@ find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(ariac_msgs REQUIRED)
 
+# Install the config directory to the package share directory
+install(DIRECTORY 
+  config
+  DESTINATION share/${PROJECT_NAME}
+)
+
 # Install Python modules
 ament_python_install_package(${PROJECT_NAME} SCRIPTS_DESTINATION lib/${PROJECT_NAME})
 
 # Install Python executables
 install(PROGRAMS
-  nodes/start_competition.py
+  nodes/tutorial_1.py
+  nodes/tutorial_2.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
