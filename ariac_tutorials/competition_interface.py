@@ -66,8 +66,7 @@ class CompetitionInterface(Node):
         # Log if competition state has changed
         if self.competition_state != msg.competition_state:
             self.get_logger().info(
-                f'Competition state is: \
-                {CompetitionInterface.competition_states_[msg.competition_state]}',
+                f'Competition state is: {CompetitionInterface.competition_states_[msg.competition_state]}',
                 throttle_duration_sec=1.0)
         self.competition_state = msg.competition_state
 
@@ -96,7 +95,7 @@ class CompetitionInterface(Node):
 
         # Create trigger request and call starter service
         request = Trigger.Request()
-        future = self.starter.call_async(request)
+        future = self.competition_starter.call_async(request)
 
         # Wait until the service call is completed
         rclpy.spin_until_future_complete(self, future)
