@@ -24,7 +24,7 @@ class CompetitionInterface(Node):
         KeyboardInterrupt: Exception raised when the user uses Ctrl+C to kill a process
     '''
 
-    competition_states_ = {
+    _competition_states = {
         CompetitionState.IDLE: 'idle',
         CompetitionState.READY: 'ready',
         CompetitionState.STARTED: 'started',
@@ -66,7 +66,7 @@ class CompetitionInterface(Node):
         # Log if competition state has changed
         if self.competition_state != msg.competition_state:
             self.get_logger().info(
-                f'Competition state is: {CompetitionInterface.competition_states_[msg.competition_state]}',
+                f'Competition state is: {CompetitionInterface._competition_states[msg.competition_state]}',
                 throttle_duration_sec=1.0)
         self.competition_state = msg.competition_state
 
