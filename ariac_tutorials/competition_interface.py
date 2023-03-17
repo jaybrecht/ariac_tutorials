@@ -8,7 +8,7 @@ from rclpy.node import Node
 from rclpy.parameter import Parameter
 from rclpy.qos import qos_profile_sensor_data
 
-import PyKDL
+from ariac_tutorials.utils import multiply_pose
 
 from ariac_msgs.msg import (
     CompetitionState,
@@ -34,7 +34,7 @@ class CompetitionInterface(Node):
         KeyboardInterrupt: Exception raised when the user uses Ctrl+C to kill a process
     '''
 
-    competition_states_ = {
+    _competition_states = {
         CompetitionState.IDLE: 'idle',
         CompetitionState.READY: 'ready',
         CompetitionState.STARTED: 'started',
@@ -43,7 +43,7 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for converting CompetitionState constants to strings'''
 
-    part_colors_ = {
+    _part_colors = {
         Part.RED: 'red',
         Part.BLUE: 'blue',
         Part.GREEN: 'green',
@@ -52,7 +52,7 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for converting PartColor constants to strings'''
 
-    part_colors_emoji_ = {
+    _part_colors_emoji = {
         Part.RED: '🟥',
         Part.BLUE: '🟦',
         Part.GREEN: '🟩',
@@ -61,7 +61,7 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for displaying an emoji for the part color'''
 
-    part_types_ = {
+    _part_types = {
         Part.BATTERY: 'battery',
         Part.PUMP: 'pump',
         Part.REGULATOR: 'regulator',
@@ -129,7 +129,7 @@ class CompetitionInterface(Node):
         # Log if competition state has changed
         if self.competition_state != msg.competition_state:
             self.get_logger().info(
-                f'Competition state is: {CompetitionInterface.competition_states_[msg.competition_state]}',
+                f'Competition state is: {CompetitionInterface._competition_states[msg.competition_state]}',
                 throttle_duration_sec=1.0)
         self.competition_state = msg.competition_state
 
@@ -185,53 +185,9 @@ class CompetitionInterface(Node):
         Arguments:
             msg -- AdvancedLogicalCameraImage message
         '''
-        
+
         self.received_data_from_camera = True
         self.camera_image = msg
-
-    def multiply_pose(self, pose1: Pose, pose2: Pose) -> Pose:
-        '''
-        Use KDL to multiply two poses together.
-        Args:
-            pose1 (Pose): Pose of the first frame
-            pose2 (Pose): Pose of the second frame
-        Returns:
-            Pose: Pose of the resulting frame
-        '''
-
-        frame1 = PyKDL.Frame(
-            PyKDL.Rotation.Quaternion(pose1.orientation.x,
-                                      pose1.orientation.y,
-                                      pose1.orientation.z,
-                                      pose1.orientation.w),
-            PyKDL.Vector(pose1.position.x, 
-                         pose1.position.y, 
-                         pose1.position.z))
-        
-        frame2 = PyKDL.Frame(
-            PyKDL.Rotation.Quaternion(pose2.orientation.x,
-                                      pose2.orientation.y,
-                                      pose2.orientation.z,
-                                      pose2.orientation.w),
-            PyKDL.Vector(pose2.position.x, 
-                         pose2.position.y, 
-                         pose2.position.z))
-
-        frame3 = frame1 * frame2
-
-        # return the resulting pose from frame3
-        pose = Pose()
-        pose.position.x = frame3.p.x()
-        pose.position.y = frame3.p.y()
-        pose.position.z = frame3.p.z()
-
-        q = frame3.M.GetQuaternion()
-        pose.orientation.x = q[0]
-        pose.orientation.y = q[1]
-        pose.orientation.z = q[2]
-        pose.orientation.w = q[3]
-
-        return pose
 
     def parse_advanced_camera_image(self, image: AdvancedLogicalCameraImage):
         '''
@@ -246,11 +202,11 @@ class CompetitionInterface(Node):
 
         part_pose: PartPose
         for part_pose in image.part_poses:
-            part_color = CompetitionInterface.part_colors_[
+            part_color = CompetitionInterface._part_colors[
                 part_pose.part.color].capitalize()
-            part_color_emoji = CompetitionInterface.part_colors_emoji_[
+            part_color_emoji = CompetitionInterface._part_colors_emoji[
                 part_pose.part.color]
-            part_type = CompetitionInterface.part_types_[
+            part_type = CompetitionInterface._part_types[
                 part_pose.part.type].capitalize()
             output += f'Part: {part_color_emoji} {part_color} {part_type}\n'
             output += '==========================\n'
@@ -266,7 +222,7 @@ class CompetitionInterface(Node):
             output += '==========================\n'
             output += 'World Frame\n'
             output += '==========================\n'
-            part_world_pose = self.multiply_pose(sensor_pose, part_pose.pose)
+            part_world_pose = multiply_pose(sensor_pose, part_pose.pose)
             position = f'x: {part_world_pose.position.x}\n\t\ty: {part_world_pose.position.y}\n\t\tz: {part_world_pose.position.z}'
             orientation = f'x: {part_world_pose.orientation.x}\n\t\ty: {part_world_pose.orientation.y}\n\t\tz: {part_world_pose.orientation.z}\n\t\tw: {part_world_pose.orientation.w}'
 
