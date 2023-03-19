@@ -8,6 +8,7 @@ def main(args=None):
     rclpy.init(args=args)
     interface = CompetitionInterface()
     interface.start_competition()
+    
     # The following line enables order displays in the terminal.
     # Set to False to disable.
     interface.parse_incoming_order = True
