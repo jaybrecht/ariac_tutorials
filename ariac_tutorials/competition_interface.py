@@ -14,6 +14,7 @@ from ariac_msgs.msg import (
 )
 
 from std_srvs.srv import Trigger
+from ariac_msgs.srv import MoveAGV
 
 from ariac_tutorials.utils import (
     KittingTask,
@@ -317,3 +318,78 @@ class CompetitionInterface(Node):
         else:
             output += 'Type: Unknown\n'
         return output
+    
+    def lock_agv_tray(self, num):
+        '''
+        Lock the tray of an AGV and parts on the tray. This will prevent tray and parts from moving during transport.
+
+        Args:
+            num (int):  AGV number
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        '''        
+        
+        # Create a client to send a request to the `/ariac/agv{num}_lock_tray` service
+        tray_locker = self.create_client(
+            Trigger,
+            f'/ariac/agv{num}_lock_tray'
+        )
+
+        # Build the request
+        request = Trigger.Request()
+        # Send the request
+        future = tray_locker.call_async(request)
+
+        # Wait for the response
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        # Check the response
+        if future.result().success:
+            self.get_logger().info(f'Locked AGV{num}\'s tray')
+        else:
+            self.get_logger().warn('Unable to lock tray')
+
+    def move_agv_to_station(self, num, station):
+        '''
+        Move an AGV to an assembly station.
+
+        Args:
+            num (int): AGV number
+            station (int): Assembly station number
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        '''        
+        
+        # Create a client to send a request to the `/ariac/move_agv` service.
+        mover = self.create_client(
+            MoveAGV,
+            f'/ariac/move_agv{num}')
+
+        # Create a request object.
+        request = MoveAGV.Request()
+
+        # Set the request location.
+        if station in [AssemblyTaskMsg.AS1, AssemblyTaskMsg.AS3]:
+            request.location = MoveAGV.Request.ASSEMBLY_FRONT
+        else:
+            request.location = MoveAGV.Request.ASSEMBLY_BACK
+
+        # Send the request.
+        future = mover.call_async(request)
+
+        # Wait for the server to respond.
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        # Check the result of the service call.
+        if future.result().success:
+            self.get_logger().info(f'Moved AGV{num} to {self._stations[station]}')
+        else:
+            self.get_logger().warn(future.result().message)
