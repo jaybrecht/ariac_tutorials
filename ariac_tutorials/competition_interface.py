@@ -3,6 +3,7 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.parameter import Parameter
+from rclpy.time import Duration
 
 from ariac_msgs.msg import (
     CompetitionState as CompetitionStateMsg,
@@ -11,10 +12,13 @@ from ariac_msgs.msg import (
     AssemblyPart as AssemblyPartMsg,
     AssemblyTask as AssemblyTaskMsg,
     AGVStatus as AGVStatusMsg,
+    VacuumGripperState,
 )
 
+from rclpy.qos import qos_profile_sensor_data
 from std_srvs.srv import Trigger
 from ariac_msgs.srv import MoveAGV
+from ariac_msgs.srv import VacuumGripperControl
 
 from ariac_tutorials.utils import (
     KittingTask,
@@ -35,6 +39,12 @@ class CompetitionInterface(Node):
     Raises:
         KeyboardInterrupt: Exception raised when the user uses Ctrl+C to kill a process
     '''
+    
+    _gripper_states = {
+        True: 'enabled',
+        False: 'disabled'
+    }
+    '''Dictionary for converting VacuumGripperState constants to strings'''
 
     _part_colors = {
         PartMsg.RED: 'red',
@@ -43,6 +53,7 @@ class CompetitionInterface(Node):
         PartMsg.ORANGE: 'orange',
         PartMsg.PURPLE: 'purple',
     }
+    '''Dictionary for converting Part color constants to strings'''
 
     _part_colors_emoji = {
         PartMsg.RED: '🟥',
@@ -51,8 +62,8 @@ class CompetitionInterface(Node):
         PartMsg.ORANGE: '🟧',
         PartMsg.PURPLE: '🟪',
     }
+    '''Dictionary for converting Part color constants to emojis'''
 
-    '''Dictionary for converting PartColor constants to strings'''
 
     _part_types = {
         PartMsg.BATTERY: 'battery',
@@ -60,7 +71,7 @@ class CompetitionInterface(Node):
         PartMsg.REGULATOR: 'regulator',
         PartMsg.SENSOR: 'sensor',
     }
-    '''Dictionary for converting PartType constants to strings'''
+    '''Dictionary for converting Part type constants to strings'''
 
     _competition_states = {
         CompetitionStateMsg.IDLE: 'idle',
@@ -77,7 +88,7 @@ class CompetitionInterface(Node):
         AGVStatusMsg.ASSEMBLY_BACK: 'back assembly station',
         AGVStatusMsg.WAREHOUSE: 'warehouse',
     }
-    '''Dictionary for converting AGVDestination constants to strings'''
+    '''Dictionary for converting AGVStatus constants to strings'''
 
     _stations = {
         AssemblyTaskMsg.AS1: "assembly station 1",
@@ -85,7 +96,7 @@ class CompetitionInterface(Node):
         AssemblyTaskMsg.AS3: "assembly station 3",
         AssemblyTaskMsg.AS4: "assembly station 4",
     }
-    '''Dictionary for converting AssemblyTaskMsg constants to strings'''
+    '''Dictionary for converting AssemblyTask constants to strings'''
 
     def __init__(self):
         super().__init__('competition_interface')
@@ -117,6 +128,21 @@ class CompetitionInterface(Node):
         self._orders = []
         # Flag for parsing incoming orders
         self._parse_incoming_order = False
+        
+        # Subscriber to the floor gripper state topic
+        self._floor_robot_gripper_state_sub = self.create_subscription(
+            VacuumGripperState,
+            '/ariac/floor_robot_gripper_state',
+            self._floor_robot_gripper_state_cb,
+            qos_profile_sensor_data)
+
+        # Service client for turning on/off the vacuum gripper on the floor robot
+        self._floor_gripper_enable = self.create_client(
+            VacuumGripperControl,
+            "/ariac/floor_robot_enable_gripper")
+
+        # Attribute to store the current state of the floor robot gripper
+        self._floor_robot_gripper_state = VacuumGripperState()
 
     @property
     def parse_incoming_order(self):
@@ -126,6 +152,16 @@ class CompetitionInterface(Node):
     @parse_incoming_order.setter
     def parse_incoming_order(self, value: bool):
         self._parse_incoming_order = value
+        
+    def _floor_robot_gripper_state_cb(self, msg: VacuumGripperState):
+        '''
+        Callback for the floor robot gripper state topic.
+
+        Args:
+            msg (VacuumGripperState): VacuumGripperState message
+        '''        
+        self._floor_robot_gripper_state = msg
+        
 
     def _competition_state_cb(self, msg: CompetitionStateMsg):
         '''Callback for the topic /ariac/competition_state
@@ -393,3 +429,50 @@ class CompetitionInterface(Node):
             self.get_logger().info(f'Moved AGV{num} to {self._stations[station]}')
         else:
             self.get_logger().warn(future.result().message)
+            
+    def set_floor_robot_gripper_state(self, state):
+        '''Set the gripper state of the floor robot.
+
+        Arguments:
+            state -- True to enable, False to disable
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        '''
+        if self._floor_robot_gripper_state.enabled == state:
+            self.get_logger().warn(f'Gripper is already {self._gripper_states[state]}')
+            return
+
+        request = VacuumGripperControl.Request()
+        request.enable = state
+
+        future = self._floor_gripper_enable.call_async(request)
+
+        try:
+            rclpy.spin_until_future_complete(self, future)
+        except KeyboardInterrupt as kb_error:
+            raise KeyboardInterrupt from kb_error
+
+        if future.result().success:
+            self.get_logger().info(f'Changed gripper state to {self._gripper_states[state]}')
+        else:
+            self.get_logger().warn('Unable to change gripper state')
+
+    def wait(self, duration):
+        '''Wait for a specified duration.
+
+        Arguments:
+            duration -- Duration to wait in seconds
+
+        Raises:
+            KeyboardInterrupt: Exception raised when the user presses Ctrl+C
+        '''
+        start = self.get_clock().now()
+
+        while self.get_clock().now() <= start + Duration(seconds=duration):
+            try:
+                rclpy.spin_once(self)
+            except KeyboardInterrupt as kb_error:
+                raise KeyboardInterrupt from kb_error
+
+    
