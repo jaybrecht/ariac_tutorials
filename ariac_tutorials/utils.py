@@ -6,6 +6,7 @@ from ariac_msgs.msg import (
     Part as PartMsg,
     Order as OrderMsg,
 )
+from geometry_msgs.msg import PoseStamped, Vector3
 
 
 @dataclass
