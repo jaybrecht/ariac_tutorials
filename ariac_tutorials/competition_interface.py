@@ -48,7 +48,7 @@ class CompetitionInterface(Node):
         self._competition_state_sub = self.create_subscription(
             CompetitionStateMsg,
             '/ariac/competition_state',
-            self.competition_state_cb,
+            self._competition_state_cb,
             10)
         # Store the state of the competition
         self._competition_state: CompetitionStateMsg = None
@@ -57,30 +57,30 @@ class CompetitionInterface(Node):
         self._break_beam0_sub = self.create_subscription(
             BreakBeamStatusMsg,
             '/ariac/sensors/breakbeam_0/status',
-            self.breakbeam0_cb,
+            self._breakbeam0_cb,
             qos_profile_sensor_data)
         # Store the number of parts that crossed the beam
-        self._part_count = 0
+        self._conveyor_part_count = 0
         # Store whether the beam is broken
         self._object_detected = False
 
     @property
-    def part_count(self):
+    def conveyor_part_count(self):
         '''Number of parts that crossed the beam.'''
-        return self._part_count
+        return self._conveyor_part_count
 
-    def breakbeam0_cb(self, msg: BreakBeamStatusMsg):
+    def _breakbeam0_cb(self, msg: BreakBeamStatusMsg):
         '''Callback for the topic /ariac/sensors/breakbeam_0/status
 
         Arguments:
             msg -- BreakBeamStatusMsg message
         '''
         if not self._object_detected and msg.object_detected:
-            self._part_count += 1
+            self._conveyor_part_count += 1
 
         self._object_detected = msg.object_detected
 
-    def competition_state_cb(self, msg: CompetitionStateMsg):
+    def _competition_state_cb(self, msg: CompetitionStateMsg):
         '''Callback for the topic /ariac/competition_state
 
         Arguments:
