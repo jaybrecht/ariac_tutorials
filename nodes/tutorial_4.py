@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+
 import rclpy
+from ariac_msgs.msg import Order as OrderMsg
 from ariac_tutorials.competition_interface import CompetitionInterface
 
 
@@ -8,16 +10,18 @@ def main(args=None):
     rclpy.init(args=args)
     interface = CompetitionInterface()
     interface.start_competition()
-    
-    # The following line enables order displays in the terminal.
-    # Set to False to disable.
-    interface.parse_incoming_order = True
 
-    while rclpy.ok():
+    while not interface.orders:
         try:
             rclpy.spin_once(interface)
         except KeyboardInterrupt:
             break
+
+    for order in interface.orders:
+        if order.order_type == OrderMsg.ASSEMBLY:
+            for agv in order.order_task.agv_numbers:
+                interface.lock_agv_tray(agv)
+                interface.move_agv_to_station(agv, order.order_task.station)
 
     interface.destroy_node()
     rclpy.shutdown()

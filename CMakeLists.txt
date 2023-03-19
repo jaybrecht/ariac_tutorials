@@ -26,6 +26,7 @@ install(PROGRAMS
   nodes/tutorial_1.py
   nodes/tutorial_2.py
   nodes/tutorial_3.py
+  nodes/tutorial_4.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
