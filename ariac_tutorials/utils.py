@@ -6,7 +6,7 @@ from typing import List
 from dataclasses import dataclass
 import PyKDL
 from geometry_msgs.msg import Pose
-
+from geometry_msgs.msg import PoseStamped, Vector3
 
 def multiply_pose(p1: Pose, p2: Pose) -> Pose:
     '''
