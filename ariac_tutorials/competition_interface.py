@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-'''
-Module used in tutorials.
-'''
 
 import rclpy
 from rclpy.node import Node
-from rclpy.parameter import Parameter
 from rclpy.qos import qos_profile_sensor_data
+from rclpy.parameter import Parameter
 
 from ariac_msgs.msg import (
-    CompetitionState,
-    BreakBeamStatus,
+    CompetitionState as CompetitionStateMsg,
+    BreakBeamStatus as BreakBeamStatusMsg,
 )
 
 from std_srvs.srv import Trigger
@@ -26,78 +23,87 @@ class CompetitionInterface(Node):
     Raises:
         KeyboardInterrupt: Exception raised when the user uses Ctrl+C to kill a process
     '''
-
     _competition_states = {
-        CompetitionState.IDLE: 'idle',
-        CompetitionState.READY: 'ready',
-        CompetitionState.STARTED: 'started',
-        CompetitionState.ORDER_ANNOUNCEMENTS_DONE: 'order_announcements_done',
-        CompetitionState.ENDED: 'ended',
+        CompetitionStateMsg.IDLE: 'idle',
+        CompetitionStateMsg.READY: 'ready',
+        CompetitionStateMsg.STARTED: 'started',
+        CompetitionStateMsg.ORDER_ANNOUNCEMENTS_DONE: 'order_announcements_done',
+        CompetitionStateMsg.ENDED: 'ended',
     }
     '''Dictionary for converting CompetitionState constants to strings'''
 
     def __init__(self):
         super().__init__('competition_interface')
 
-        # Sets the node to use simulation time
         sim_time = Parameter(
             "use_sim_time",
             rclpy.Parameter.Type.BOOL,
             True
         )
+
         self.set_parameters([sim_time])
 
-        # Flag for parsing incoming competition state
-        self.competition_state = None
-
-        # Flag for detecting objects on conveyor belt
-        self.conveyor_object_detected = False
-
-        # Counter of parts on the conveyor
-        self.conveyor_part_count = 0
+        # Service client for starting the competition
+        self._start_competition_client = self.create_client(Trigger, '/ariac/start_competition')
 
         # Subscriber to the competition state topic
-        self.subscription = self.create_subscription(
-            CompetitionState,
+        self._competition_state_sub = self.create_subscription(
+            CompetitionStateMsg,
             '/ariac/competition_state',
             self.competition_state_cb,
             10)
+        # Store the state of the competition
+        self._competition_state: CompetitionStateMsg = None
 
         # Subscriber to the break beam status topic
-        self.break_beam_sub = self.create_subscription(
-            BreakBeamStatus,
+        self._break_beam0_sub = self.create_subscription(
+            BreakBeamStatusMsg,
             '/ariac/sensors/breakbeam_0/status',
             self.breakbeam0_cb,
             qos_profile_sensor_data)
+        # Store the number of parts that crossed the beam
+        self._part_count = 0
+        # Store whether the beam is broken
+        self._object_detected = False
 
-        # Service client for starting the competition
-        self.competition_starter = self.create_client(
-            Trigger, '/ariac/start_competition')
+    @property
+    def part_count(self):
+        '''Number of parts that crossed the beam.'''
+        return self._part_count
 
-    def competition_state_cb(self, msg: CompetitionState):
+    def breakbeam0_cb(self, msg: BreakBeamStatusMsg):
+        '''Callback for the topic /ariac/sensors/breakbeam_0/status
+
+        Arguments:
+            msg -- BreakBeamStatusMsg message
+        '''
+        if not self._object_detected and msg.object_detected:
+            self._part_count += 1
+
+        self._object_detected = msg.object_detected
+
+    def competition_state_cb(self, msg: CompetitionStateMsg):
         '''Callback for the topic /ariac/competition_state
 
         Arguments:
             msg -- CompetitionState message
         '''
         # Log if competition state has changed
-        if self.competition_state != msg.competition_state:
+        if self._competition_state != msg.competition_state:
             self.get_logger().info(
                 f'Competition state is: {CompetitionInterface._competition_states[msg.competition_state]}',
                 throttle_duration_sec=1.0)
-        self.competition_state = msg.competition_state
+        self._competition_state = msg.competition_state
 
     def start_competition(self):
         '''Function to start the competition.
         '''
+        self.get_logger().info('Waiting for competition to be ready')
 
-        if self.competition_state == CompetitionState.STARTED:
-            self.get_logger().warn('Competition is already started.')
+        if self._competition_state == CompetitionStateMsg.STARTED:
             return
-
         # Wait for competition to be ready
-        while self.competition_state != CompetitionState.READY:
-            self.get_logger().info('Waiting for competition to be ready.', once=True)
+        while self._competition_state != CompetitionStateMsg.READY:
             try:
                 rclpy.spin_once(self)
             except KeyboardInterrupt:
@@ -105,14 +111,13 @@ class CompetitionInterface(Node):
 
         self.get_logger().info('Competition is ready. Starting...')
 
-        # Check if service is available
-        if not self.competition_starter.wait_for_service(timeout_sec=1.0):
-            self.get_logger().error('Service \'/ariac/start_competition\' is not available.')
-            return
+        # Call ROS service to start competition
+        while not self._start_competition_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /ariac/start_competition to be available...')
 
         # Create trigger request and call starter service
         request = Trigger.Request()
-        future = self.competition_starter.call_async(request)
+        future = self._start_competition_client.call_async(request)
 
         # Wait until the service call is completed
         rclpy.spin_until_future_complete(self, future)
@@ -120,16 +125,4 @@ class CompetitionInterface(Node):
         if future.result().success:
             self.get_logger().info('Started competition.')
         else:
-            self.get_logger().error('Unable to start competition.')
-
-    def breakbeam0_cb(self, msg: BreakBeamStatus):
-        '''Callback for the topic /ariac/sensors/breakbeam_0/status
-        Arguments:
-            msg -- BreakBeamStatus message
-        '''
-
-        if not self.conveyor_object_detected and msg.object_detected:
-            self.conveyor_part_count += 1
-
-        # Store the last reading from the sensor
-        self.conveyor_object_detected = msg.object_detected
+            self.get_logger().info('Unable to start competition')
