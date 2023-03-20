@@ -11,6 +11,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(ariac_msgs REQUIRED)
 find_package(orocos_kdl REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
 
 # Install the config directory to the package share directory
 install(DIRECTORY 
@@ -23,10 +24,36 @@ ament_python_install_package(${PROJECT_NAME} SCRIPTS_DESTINATION lib/${PROJECT_N
 
 # Install Python executables
 install(PROGRAMS
-  nodes/tutorial_1.py
-  nodes/tutorial_2.py
-  nodes/tutorial_3.py
+  scripts/tutorial_1.py
+  scripts/tutorial_2.py
+  scripts/tutorial_3.py
+  scripts/tutorial_4.py
+  scripts/tutorial_5.py
+  scripts/tutorial_6.py
+  scripts/tutorial_7.py
   DESTINATION lib/${PROJECT_NAME}
 )
+
+
+# Install the config directory to the package share directory
+install(DIRECTORY 
+  config
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
+# Install C++ executables
+add_executable(robot_commander 
+  src/robot_commander.cpp)
+
+ament_target_dependencies(robot_commander 
+  rclcpp
+  moveit_ros_planning_interface 
+  ariac_msgs)
+
+install(TARGETS
+  robot_commander
+  DESTINATION lib/${PROJECT_NAME})
+
 
 ament_package()

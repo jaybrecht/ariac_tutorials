@@ -14,6 +14,7 @@
   <depend>ariac_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>orocos_kdl</depend>
+  <depend>moveit_ros_planning_interface</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

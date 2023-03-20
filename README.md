@@ -1,3 +1,3 @@
-# ARIAC Tutorials
+# Tutorial 7: Move Robots to Home Position
 
-Please refer to the [official ARIAC documentation](https://ariac.readthedocs.io/en/latest/) for more information. Each branch on this repository shows the finished state after the specified tutorial.
+Please refer to the [official ARIAC documentation](https://ariac.readthedocs.io/en/latest/tutorials/tutorial_7.html) for more information on this tutorial.
