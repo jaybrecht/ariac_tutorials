@@ -3,7 +3,7 @@
 <package format="3">
   <name>ariac_tutorials</name>
   <version>0.0.0</version>
-  <description>ROS2 pkg for ARIAC tutorials</description>
+  <description>Tutorial 4</description>
   <maintainer email="justin.albrecht@nist.gov">Justin Albrecht</maintainer>
   <license>Apache License 2.0</license>
 
