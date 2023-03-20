@@ -9,10 +9,6 @@ from ariac_msgs.msg import (
     AdvancedLogicalCameraImage as AdvancedLogicalCameraImageMsg,
     Part as PartMsg,
     PartPose as PartPoseMsg,
-    Order as OrderMsg,
-    AssemblyPart as AssemblyPartMsg,
-    AssemblyTask as AssemblyTaskMsg,
-    AGVStatus as AGVStatusMsg,
 )
 
 from std_srvs.srv import Trigger
