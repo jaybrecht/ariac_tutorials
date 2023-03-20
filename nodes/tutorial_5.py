@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-'
+
 
 import rclpy
 from ariac_msgs.msg import Order as OrderMsg
