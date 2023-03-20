@@ -25,7 +25,6 @@ from ariac_tutorials.utils import (
     CombinedTask,
     AssemblyTask,
     KittingPart,
-    AssemblyPart
 )
 
 
@@ -74,14 +73,6 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for converting Part type constants to strings'''
     
-    stations_ = {
-        AssemblyTaskMsg.AS1: "assembly station 1",
-        AssemblyTaskMsg.AS2: "assembly station 2",
-        AssemblyTaskMsg.AS3: "assembly station 3",
-        AssemblyTaskMsg.AS4: "assembly station 4",
-    }
-    '''Dictionary for converting AssemblyTask constants to strings'''
-    
     _destinations = {
         AGVStatusMsg.KITTING: 'kitting station',
         AGVStatusMsg.ASSEMBLY_FRONT: 'front assembly station',
@@ -89,8 +80,6 @@ class CompetitionInterface(Node):
         AGVStatusMsg.WAREHOUSE: 'warehouse',
     }
     '''Dictionary for converting AGVDestination constants to strings'''
-    
-    
 
     def __init__(self):
         super().__init__('competition_interface')
