@@ -162,14 +162,19 @@ class CompetitionInterface(Node):
             '/ariac/floor_robot_gripper_state',
             self._floor_robot_gripper_state_cb,
             qos_profile_sensor_data)
-
         # Service client for turning on/off the vacuum gripper on the floor robot
         self._floor_gripper_enable = self.create_client(
             VacuumGripperControl,
             "/ariac/floor_robot_enable_gripper")
-
         # Attribute to store the current state of the floor robot gripper
         self._floor_robot_gripper_state = VacuumGripperState()
+        
+        # Service client for moving the floor robot to the home position
+        self._move_floor_robot_home = self.create_client(
+            Trigger, '/competitor/move_floor_robot_home')
+        # Service client for moving the ceiling robot to the home position
+        self._move_ceiling_robot_home = self.create_client(
+            Trigger, '/competitor/move_ceiling_robot_home')
 
     @property
     def orders(self):
@@ -585,17 +590,17 @@ class CompetitionInterface(Node):
         request = Trigger.Request()
 
         if robot_name == 'floor_robot':
-            if not self.move_floor_robot_home.wait_for_service(timeout_sec=1.0):
+            if not self._move_floor_robot_home.wait_for_service(timeout_sec=1.0):
                 self.get_logger().error('Robot commander node not running')
                 return
 
-            future = self.move_floor_robot_home.call_async(request)
+            future = self._move_floor_robot_home.call_async(request)
 
         elif robot_name == 'ceiling_robot':
-            if not self.move_ceiling_robot_home.wait_for_service(timeout_sec=1.0):
+            if not self._move_ceiling_robot_home.wait_for_service(timeout_sec=1.0):
                 self.get_logger().error('Robot commander node not running')
                 return
-            future = self.move_ceiling_robot_home.call_async(request)
+            future = self._move_ceiling_robot_home.call_async(request)
         else:
             self.get_logger().error(f'Robot name: ({robot_name}) is not valid')
             return
