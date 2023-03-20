@@ -16,13 +16,13 @@ from ariac_msgs.msg import (
     AGVStatus as AGVStatusMsg,
     VacuumGripperState,
 )
+
 from ariac_msgs.srv import (
     MoveAGV,
     VacuumGripperControl
 )
 
 from std_srvs.srv import Trigger
-
 
 from ariac_tutorials.utils import (
     multiply_pose,
@@ -33,7 +33,6 @@ from ariac_tutorials.utils import (
     AssemblyTask,
     KittingPart
 )
-
 
 class CompetitionInterface(Node):
     '''
@@ -172,6 +171,7 @@ class CompetitionInterface(Node):
         # Service client for moving the floor robot to the home position
         self._move_floor_robot_home = self.create_client(
             Trigger, '/competitor/move_floor_robot_home')
+        
         # Service client for moving the ceiling robot to the home position
         self._move_ceiling_robot_home = self.create_client(
             Trigger, '/competitor/move_ceiling_robot_home')
