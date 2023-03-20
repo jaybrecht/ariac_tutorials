@@ -12,14 +12,12 @@ from ariac_msgs.msg import (
     Order as OrderMsg,
     AssemblyPart as AssemblyPartMsg,
     AssemblyTask as AssemblyTaskMsg,
-    AGVStatus as AGVStatusMsg,
-)
+    AGVStatus as AGVStatusMsg)
+
 from ariac_msgs.srv import (
-    MoveAGV
-)
+    MoveAGV)
 
 from std_srvs.srv import Trigger
-
 
 from ariac_tutorials.utils import (
     multiply_pose,
@@ -30,7 +28,6 @@ from ariac_tutorials.utils import (
     AssemblyTask,
     KittingPart
 )
-
 
 class CompetitionInterface(Node):
     '''
