@@ -1,27 +1,34 @@
-#!/usr/bin/env python3
-
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
 from rclpy.parameter import Parameter
-
+from geometry_msgs.msg import Pose
 from ariac_msgs.msg import (
     CompetitionState as CompetitionStateMsg,
+    BreakBeamStatus as BreakBeamStatusMsg,
+    AdvancedLogicalCameraImage as AdvancedLogicalCameraImageMsg,
     Part as PartMsg,
+    PartPose as PartPoseMsg,
     Order as OrderMsg,
     AssemblyPart as AssemblyPartMsg,
     AssemblyTask as AssemblyTaskMsg,
     AGVStatus as AGVStatusMsg,
 )
+from ariac_msgs.srv import (
+    MoveAGV
+)
 
 from std_srvs.srv import Trigger
-from ariac_msgs.srv import MoveAGV
+
 
 from ariac_tutorials.utils import (
-    KittingTask,
+    multiply_pose,
+    AdvancedLogicalCameraImage,
     Order,
-    KittingPart,
+    KittingTask,
+    CombinedTask,
     AssemblyTask,
-    CombinedTask
+    KittingPart
 )
 
 
@@ -35,33 +42,6 @@ class CompetitionInterface(Node):
     Raises:
         KeyboardInterrupt: Exception raised when the user uses Ctrl+C to kill a process
     '''
-
-    _part_colors = {
-        PartMsg.RED: 'red',
-        PartMsg.BLUE: 'blue',
-        PartMsg.GREEN: 'green',
-        PartMsg.ORANGE: 'orange',
-        PartMsg.PURPLE: 'purple',
-    }
-
-    _part_colors_emoji = {
-        PartMsg.RED: '🟥',
-        PartMsg.BLUE: '🟦',
-        PartMsg.GREEN: '🟩',
-        PartMsg.ORANGE: '🟧',
-        PartMsg.PURPLE: '🟪',
-    }
-
-    '''Dictionary for converting PartColor constants to strings'''
-
-    _part_types = {
-        PartMsg.BATTERY: 'battery',
-        PartMsg.PUMP: 'pump',
-        PartMsg.REGULATOR: 'regulator',
-        PartMsg.SENSOR: 'sensor',
-    }
-    '''Dictionary for converting PartType constants to strings'''
-
     _competition_states = {
         CompetitionStateMsg.IDLE: 'idle',
         CompetitionStateMsg.READY: 'ready',
@@ -71,6 +51,40 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for converting CompetitionState constants to strings'''
 
+    _part_colors = {
+        PartMsg.RED: 'red',
+        PartMsg.BLUE: 'blue',
+        PartMsg.GREEN: 'green',
+        PartMsg.ORANGE: 'orange',
+        PartMsg.PURPLE: 'purple',
+    }
+    '''Dictionary for converting Part color constants to strings'''
+
+    _part_colors_emoji = {
+        PartMsg.RED: '🟥',
+        PartMsg.BLUE: '🟦',
+        PartMsg.GREEN: '🟩',
+        PartMsg.ORANGE: '🟧',
+        PartMsg.PURPLE: '🟪',
+    }
+    '''Dictionary for converting Part color constants to emojis'''
+
+    _part_types = {
+        PartMsg.BATTERY: 'battery',
+        PartMsg.PUMP: 'pump',
+        PartMsg.REGULATOR: 'regulator',
+        PartMsg.SENSOR: 'sensor',
+    }
+    '''Dictionary for converting Part type constants to strings'''
+
+    stations_ = {
+        AssemblyTaskMsg.AS1: "assembly station 1",
+        AssemblyTaskMsg.AS2: "assembly station 2",
+        AssemblyTaskMsg.AS3: "assembly station 3",
+        AssemblyTaskMsg.AS4: "assembly station 4",
+    }
+    '''Dictionary for converting AssemblyTask constants to strings'''
+
     _destinations = {
         AGVStatusMsg.KITTING: 'kitting station',
         AGVStatusMsg.ASSEMBLY_FRONT: 'front assembly station',
@@ -78,14 +92,6 @@ class CompetitionInterface(Node):
         AGVStatusMsg.WAREHOUSE: 'warehouse',
     }
     '''Dictionary for converting AGVDestination constants to strings'''
-
-    _stations = {
-        AssemblyTaskMsg.AS1: "assembly station 1",
-        AssemblyTaskMsg.AS2: "assembly station 2",
-        AssemblyTaskMsg.AS3: "assembly station 3",
-        AssemblyTaskMsg.AS4: "assembly station 4",
-    }
-    '''Dictionary for converting AssemblyTaskMsg constants to strings'''
 
     def __init__(self):
         super().__init__('competition_interface')
@@ -107,25 +113,90 @@ class CompetitionInterface(Node):
             '/ariac/competition_state',
             self._competition_state_cb,
             10)
-
         # Store the state of the competition
         self._competition_state: CompetitionStateMsg = None
 
+        # Subscriber to the break beam status topic
+        self._break_beam0_sub = self.create_subscription(
+            BreakBeamStatusMsg,
+            '/ariac/sensors/breakbeam_0/status',
+            self._breakbeam0_cb,
+            qos_profile_sensor_data)
+        # Store the number of parts that crossed the beam
+        self._conveyor_part_count = 0
+        # Store whether the beam is broken
+        self._object_detected = False
+
+        # Subscriber to the logical camera topic
+        self._advanced_camera0_sub = self.create_subscription(
+            AdvancedLogicalCameraImageMsg,
+            '/ariac/sensors/advanced_camera_0/image',
+            self._advanced_camera0_cb,
+            qos_profile_sensor_data)
+        # Store each camera image as an AdvancedLogicalCameraImage object
+        self._camera_image: AdvancedLogicalCameraImage = None
+
         # Subscriber to the order topic
-        self._orders_sub = self.create_subscription(OrderMsg, '/ariac/orders', self._orders_cb, 10)
-        # List of orders
-        self._orders = []
+        self.orders_sub = self.create_subscription(
+            OrderMsg,
+            '/ariac/orders',
+            self._orders_cb,
+            10)
         # Flag for parsing incoming orders
         self._parse_incoming_order = False
+        # List of orders
+        self._orders = []
+
+    @property
+    def orders(self):
+        return self._orders
+
+    @property
+    def camera_image(self):
+        return self._camera_image
+
+    @property
+    def conveyor_part_count(self):
+        return self._conveyor_part_count
 
     @property
     def parse_incoming_order(self):
-        '''Property for the parse_incoming_order flag.'''
         return self._parse_incoming_order
 
     @parse_incoming_order.setter
-    def parse_incoming_order(self, value: bool):
+    def parse_incoming_order(self, value):
         self._parse_incoming_order = value
+
+    def _orders_cb(self, msg: Order):
+        '''Callback for the topic /ariac/orders
+        Arguments:
+            msg -- Order message
+        '''
+        order = Order(msg)
+        self._orders.append(order)
+        if self._parse_incoming_order:
+            self.get_logger().info(self._parse_order(order))
+
+    def _advanced_camera0_cb(self, msg: AdvancedLogicalCameraImageMsg):
+        '''Callback for the topic /ariac/sensors/advanced_camera_0/image
+
+        Arguments:
+            msg -- AdvancedLogicalCameraImage message
+        '''
+        self._camera_image = AdvancedLogicalCameraImage(msg.part_poses,
+                                                        msg.tray_poses,
+                                                        msg.sensor_pose)
+
+    def _breakbeam0_cb(self, msg: BreakBeamStatusMsg):
+        '''Callback for the topic /ariac/sensors/breakbeam_0/status
+
+        Arguments:
+            msg -- BreakBeamStatusMsg message
+        '''
+        if not self._object_detected and msg.object_detected:
+            self._conveyor_part_count += 1
+
+        self._object_detected = msg.object_detected
 
     def _competition_state_cb(self, msg: CompetitionStateMsg):
         '''Callback for the topic /ariac/competition_state
@@ -139,17 +210,6 @@ class CompetitionInterface(Node):
                 f'Competition state is: {CompetitionInterface._competition_states[msg.competition_state]}',
                 throttle_duration_sec=1.0)
         self._competition_state = msg.competition_state
-
-    def _orders_cb(self, msg: OrderMsg):
-        '''Callback for the topic /ariac/orders
-
-        Arguments:
-            msg (OrderMsg) -- Order message
-        '''
-        order = Order(msg)
-        self._orders.append(order)
-        if self._parse_incoming_order:
-            self.get_logger().info(self.parse_order(order))
 
     def start_competition(self):
         '''Function to start the competition.
@@ -182,6 +242,49 @@ class CompetitionInterface(Node):
             self.get_logger().info('Started competition.')
         else:
             self.get_logger().info('Unable to start competition')
+
+    def parse_advanced_camera_image(self):
+        '''
+        Parse an AdvancedLogicalCameraImage message and return a string representation.
+        '''
+        output = '\n\n==========================\n'
+
+        sensor_pose: Pose = self._camera_image._sensor_pose
+
+        part_pose: PartPoseMsg
+
+        counter = 1
+        for part_pose in self._camera_image._part_poses:
+            part_color = CompetitionInterface._part_colors[part_pose.part.color].capitalize()
+            part_color_emoji = CompetitionInterface._part_colors_emoji[part_pose.part.color]
+            part_type = CompetitionInterface._part_types[part_pose.part.type].capitalize()
+            output += f'Part {counter}: {part_color_emoji} {part_color} {part_type}\n'
+            output += '==========================\n'
+            output += 'Camera Frame\n'
+            output += '==========================\n'
+            position = f'x: {part_pose.pose.position.x}\n\t\ty: {part_pose.pose.position.y}\n\t\tz: {part_pose.pose.position.z}'
+            orientation = f'x: {part_pose.pose.orientation.x}\n\t\ty: {part_pose.pose.orientation.y}\n\t\tz: {part_pose.pose.orientation.z}\n\t\tw: {part_pose.pose.orientation.w}'
+
+            output += '\tPosition:\n'
+            output += f'\t\t{position}\n'
+            output += '\tOrientation:\n'
+            output += f'\t\t{orientation}\n'
+            output += '==========================\n'
+            output += 'World Frame\n'
+            output += '==========================\n'
+            part_world_pose = multiply_pose(sensor_pose, part_pose.pose)
+            position = f'x: {part_world_pose.position.x}\n\t\ty: {part_world_pose.position.y}\n\t\tz: {part_world_pose.position.z}'
+            orientation = f'x: {part_world_pose.orientation.x}\n\t\ty: {part_world_pose.orientation.y}\n\t\tz: {part_world_pose.orientation.z}\n\t\tw: {part_world_pose.orientation.w}'
+
+            output += '\tPosition:\n'
+            output += f'\t\t{position}\n'
+            output += '\tOrientation:\n'
+            output += f'\t\t{orientation}\n'
+            output += '==========================\n'
+
+            counter += 1
+
+        return output
 
     def _parse_kitting_task(self, kitting_task: KittingTask):
         '''
@@ -296,7 +399,7 @@ class CompetitionInterface(Node):
 
         return output
 
-    def parse_order(self, order: Order):
+    def _parse_order(self, order: Order):
         '''Parse an order message and return a string representation.
 
         Args:
@@ -318,7 +421,7 @@ class CompetitionInterface(Node):
         else:
             output += 'Type: Unknown\n'
         return output
-    
+
     def lock_agv_tray(self, num):
         '''
         Lock the tray of an AGV and parts on the tray. This will prevent tray and parts from moving during transport.
@@ -328,8 +431,8 @@ class CompetitionInterface(Node):
 
         Raises:
             KeyboardInterrupt: Exception raised when the user presses Ctrl+C
-        '''        
-        
+        '''
+
         # Create a client to send a request to the `/ariac/agv{num}_lock_tray` service
         tray_locker = self.create_client(
             Trigger,
@@ -363,8 +466,8 @@ class CompetitionInterface(Node):
 
         Raises:
             KeyboardInterrupt: Exception raised when the user presses Ctrl+C
-        '''        
-        
+        '''
+
         # Create a client to send a request to the `/ariac/move_agv` service.
         mover = self.create_client(
             MoveAGV,
