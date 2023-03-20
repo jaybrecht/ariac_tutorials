@@ -66,7 +66,6 @@ class CompetitionInterface(Node):
 
     @property
     def conveyor_part_count(self):
-        '''Number of parts that crossed the beam.'''
         return self._conveyor_part_count
 
     def _breakbeam0_cb(self, msg: BreakBeamStatusMsg):
