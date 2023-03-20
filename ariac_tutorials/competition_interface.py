@@ -77,7 +77,7 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for converting Part type constants to strings'''
 
-    stations_ = {
+    _stations = {
         AssemblyTaskMsg.AS1: "assembly station 1",
         AssemblyTaskMsg.AS2: "assembly station 2",
         AssemblyTaskMsg.AS3: "assembly station 3",
