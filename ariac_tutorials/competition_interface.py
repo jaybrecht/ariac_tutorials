@@ -16,13 +16,13 @@ from ariac_msgs.msg import (
     AGVStatus as AGVStatusMsg,
     VacuumGripperState,
 )
+
 from ariac_msgs.srv import (
     MoveAGV,
     VacuumGripperControl
 )
 
 from std_srvs.srv import Trigger
-
 
 from ariac_tutorials.utils import (
     multiply_pose,
@@ -33,7 +33,6 @@ from ariac_tutorials.utils import (
     AssemblyTask,
     KittingPart
 )
-
 
 class CompetitionInterface(Node):
     '''
