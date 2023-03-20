@@ -5,12 +5,6 @@ from ariac_tutorials.competition_interface import CompetitionInterface
 
 
 def main(args=None):
-    '''
-    main function for the change_gripper_state script.
-
-    Args:
-        args (Any, optional): ROS arguments. Defaults to None.
-    '''
     rclpy.init(args=args)
     interface = CompetitionInterface()
     interface.start_competition()
