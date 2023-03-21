@@ -50,6 +50,7 @@ class CompetitionInterface(Node):
             '/ariac/competition_state',
             self._competition_state_cb,
             10)
+        
         # Store the state of the competition
         self._competition_state: CompetitionStateMsg = None
 
@@ -59,8 +60,10 @@ class CompetitionInterface(Node):
             '/ariac/sensors/breakbeam_0/status',
             self._breakbeam0_cb,
             qos_profile_sensor_data)
+        
         # Store the number of parts that crossed the beam
         self._conveyor_part_count = 0
+        
         # Store whether the beam is broken
         self._object_detected = False
 
@@ -81,15 +84,14 @@ class CompetitionInterface(Node):
 
     def _competition_state_cb(self, msg: CompetitionStateMsg):
         '''Callback for the topic /ariac/competition_state
-
         Arguments:
             msg -- CompetitionState message
         '''
         # Log if competition state has changed
         if self._competition_state != msg.competition_state:
-            self.get_logger().info(
-                f'Competition state is: {CompetitionInterface._competition_states[msg.competition_state]}',
-                throttle_duration_sec=1.0)
+            state = CompetitionInterface._competition_states[msg.competition_state]
+            self.get_logger().info(f'Competition state is: {state}', throttle_duration_sec=1.0)
+        
         self._competition_state = msg.competition_state
 
     def start_competition(self):
@@ -108,9 +110,10 @@ class CompetitionInterface(Node):
 
         self.get_logger().info('Competition is ready. Starting...')
 
-        # Call ROS service to start competition
-        while not self._start_competition_client.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('Waiting for /ariac/start_competition to be available...')
+        # Check if service is available
+        if not self._start_competition_client.wait_for_service(timeout_sec=3.0):
+            self.get_logger().error('Service \'/ariac/start_competition\' is not available.')
+            return
 
         # Create trigger request and call starter service
         request = Trigger.Request()
@@ -122,4 +125,4 @@ class CompetitionInterface(Node):
         if future.result().success:
             self.get_logger().info('Started competition.')
         else:
-            self.get_logger().info('Unable to start competition')
+            self.get_logger().warn('Unable to start competition')
