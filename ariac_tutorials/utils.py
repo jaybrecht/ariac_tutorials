@@ -1,8 +1,13 @@
-from typing import List
+import math
+from typing import List, Tuple
 import PyKDL
 from dataclasses import dataclass
-from geometry_msgs.msg import Pose
-from geometry_msgs.msg import PoseStamped, Vector3
+from geometry_msgs.msg import (
+    Pose,
+    PoseStamped, 
+    Vector3,
+    Quaternion
+)
 
 from ariac_msgs.msg import (
     PartPose as PartPoseMsg,
@@ -30,7 +35,7 @@ def multiply_pose(p1: Pose, p2: Pose) -> Pose:
     o2 = p2.orientation
     frame2 = PyKDL.Frame(
         PyKDL.Rotation.Quaternion(o2.x, o2.y, o2.z, o2.w),
-        PyKDL.Vector(p1.position.x, p1.position.y, p1.position.z))
+        PyKDL.Vector(p2.position.x, p2.position.y, p2.position.z))
 
     frame3 = frame1 * frame2
 
@@ -48,6 +53,39 @@ def multiply_pose(p1: Pose, p2: Pose) -> Pose:
 
     return pose
 
+
+def rpy_from_quaternion(q: Quaternion) -> Tuple[float, float, float]:
+    ''' 
+    Use KDL to convert a quaternion to euler angles roll, pitch, yaw.
+    Args:
+        q (Quaternion): quaternion to convert
+    Returns:
+        Tuple[float, float, float]: roll, pitch, yaw
+    '''
+    
+    R = PyKDL.Rotation.Quaternion(q.x, q.y, q.z, q.w)
+    return R.GetRPY()
+
+
+def rad_to_deg_str(radians: float) -> str:
+    '''
+    Converts radians to degrees in the domain [-PI, PI]
+    Args:
+        radians (float): value in radians
+    Returns:
+        str: String representing the value in degrees
+    '''
+    
+    degrees = math.degrees(radians)
+    if degrees > 180:
+        degrees = degrees - 360
+    elif degrees < -180:
+        degrees = degrees + 360
+
+    if -1 < degrees < 1:
+        degrees = 0 
+    
+    return f'{degrees:.0f}' + chr(176)
 
 @dataclass
 class AdvancedLogicalCameraImage:

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 '''
-Example script to move both robots to home position.
-
 To test this script, run the following command:
 
 - ros2 launch ariac_gazebo ariac.launch.py competitor_pkg:=ariac_tutorials trial_name:=tutorials

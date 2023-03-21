@@ -14,6 +14,7 @@
   <depend>ariac_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>orocos_kdl</depend>
+  <depend>python3-pykdl</depend>
   <depend>moveit_ros_planning_interface</depend>
 
   <export>
