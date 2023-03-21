@@ -30,7 +30,7 @@ def multiply_pose(p1: Pose, p2: Pose) -> Pose:
     o2 = p2.orientation
     frame2 = PyKDL.Frame(
         PyKDL.Rotation.Quaternion(o2.x, o2.y, o2.z, o2.w),
-        PyKDL.Vector(p1.position.x, p1.position.y, p1.position.z))
+        PyKDL.Vector(p2.position.x, p2.position.y, p2.position.z))
 
     frame3 = frame1 * frame2
 
