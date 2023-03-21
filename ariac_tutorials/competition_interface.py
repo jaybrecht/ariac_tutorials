@@ -12,9 +12,8 @@ from ariac_msgs.msg import (
     Order as OrderMsg,
     AssemblyPart as AssemblyPartMsg,
     AGVStatus as AGVStatusMsg,
+    AssemblyTask as AssemblyTaskMsg,
 )
-
-from geometry_msgs.msg import Pose
 
 from std_srvs.srv import Trigger
 
@@ -81,6 +80,14 @@ class CompetitionInterface(Node):
         AGVStatusMsg.ASSEMBLY_FRONT: 'front assembly station',
         AGVStatusMsg.ASSEMBLY_BACK: 'back assembly station',
         AGVStatusMsg.WAREHOUSE: 'warehouse',
+    }
+    '''Dictionary for converting AGVDestination constants to strings'''
+
+    _stations = {
+        AssemblyTaskMsg.AS1: 'assembly station 1',
+        AssemblyTaskMsg.AS2: 'assembly station 2',
+        AssemblyTaskMsg.AS3: 'assembly station 3',
+        AssemblyTaskMsg.AS4: 'assembly station 4',
     }
     '''Dictionary for converting AGVDestination constants to strings'''
 
@@ -345,7 +352,7 @@ class CompetitionInterface(Node):
             output += f'AGV: {assembly_task.agv_number[0]}\n'
         elif len(assembly_task.agv_numbers) == 2:
             output += f'AGV(s): [{assembly_task.agv_numbers[0]}, {assembly_task.agv_numbers[1]}]\n'
-        output += f'Assembly station: {self._destinations[assembly_task.station].title()}\n'
+        output += f'Station: {self._stations[assembly_task.station].title()}\n'
         output += 'Products:\n'
         output += '==========================\n'
 
@@ -388,7 +395,7 @@ class CompetitionInterface(Node):
 
         output = 'Type: Combined\n'
         output += '==========================\n'
-        output += f'Assembly station: {self._destinations[combined_task.station].title()}\n'
+        output += f'Station: {self._stations[combined_task.station].title()}\n'
         output += 'Products:\n'
         output += '==========================\n'
 
