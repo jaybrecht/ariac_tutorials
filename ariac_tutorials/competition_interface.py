@@ -3,7 +3,7 @@ from rclpy.time import Duration
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from rclpy.parameter import Parameter
-from geometry_msgs.msg import Pose
+
 from ariac_msgs.msg import (
     CompetitionState as CompetitionStateMsg,
     BreakBeamStatus as BreakBeamStatusMsg,
@@ -26,6 +26,8 @@ from std_srvs.srv import Trigger
 
 from ariac_tutorials.utils import (
     multiply_pose,
+    rpy_from_quaternion,
+    rad_to_deg_str,
     AdvancedLogicalCameraImage,
     Order,
     KittingTask,
@@ -121,6 +123,7 @@ class CompetitionInterface(Node):
             '/ariac/competition_state',
             self._competition_state_cb,
             10)
+        
         # Store the state of the competition
         self._competition_state: CompetitionStateMsg = None
 
@@ -130,8 +133,10 @@ class CompetitionInterface(Node):
             '/ariac/sensors/breakbeam_0/status',
             self._breakbeam0_cb,
             qos_profile_sensor_data)
+        
         # Store the number of parts that crossed the beam
         self._conveyor_part_count = 0
+        
         # Store whether the beam is broken
         self._object_detected = False
 
@@ -141,6 +146,7 @@ class CompetitionInterface(Node):
             '/ariac/sensors/advanced_camera_0/image',
             self._advanced_camera0_cb,
             qos_profile_sensor_data)
+        
         # Store each camera image as an AdvancedLogicalCameraImage object
         self._camera_image: AdvancedLogicalCameraImage = None
 
@@ -150,8 +156,10 @@ class CompetitionInterface(Node):
             '/ariac/orders',
             self._orders_cb,
             10)
+        
         # Flag for parsing incoming orders
         self._parse_incoming_order = False
+        
         # List of orders
         self._orders = []
         
@@ -223,15 +231,14 @@ class CompetitionInterface(Node):
 
     def _competition_state_cb(self, msg: CompetitionStateMsg):
         '''Callback for the topic /ariac/competition_state
-
         Arguments:
             msg -- CompetitionState message
         '''
         # Log if competition state has changed
         if self._competition_state != msg.competition_state:
-            self.get_logger().info(
-                f'Competition state is: {CompetitionInterface._competition_states[msg.competition_state]}',
-                throttle_duration_sec=1.0)
+            state = CompetitionInterface._competition_states[msg.competition_state]
+            self.get_logger().info(f'Competition state is: {state}', throttle_duration_sec=1.0)
+        
         self._competition_state = msg.competition_state
         
     def _floor_robot_gripper_state_cb(self, msg: VacuumGripperState):
@@ -258,9 +265,10 @@ class CompetitionInterface(Node):
 
         self.get_logger().info('Competition is ready. Starting...')
 
-        # Call ROS service to start competition
-        while not self._start_competition_client.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('Waiting for /ariac/start_competition to be available...')
+        # Check if service is available
+        if not self._start_competition_client.wait_for_service(timeout_sec=3.0):
+            self.get_logger().error('Service \'/ariac/start_competition\' is not available.')
+            return
 
         # Create trigger request and call starter service
         request = Trigger.Request()
@@ -272,58 +280,64 @@ class CompetitionInterface(Node):
         if future.result().success:
             self.get_logger().info('Started competition.')
         else:
-            self.get_logger().info('Unable to start competition')
+            self.get_logger().warn('Unable to start competition')
 
-    def parse_advanced_camera_image(self):
+    def parse_advanced_camera_image(self, image: AdvancedLogicalCameraImage) -> str:
         '''
         Parse an AdvancedLogicalCameraImage message and return a string representation.
         '''
-        output = '\n\n==========================\n'
+        
+        if len(image._part_poses) == 0:
+            return 'No parts detected'
 
-        sensor_pose: Pose = self._camera_image._sensor_pose
-
-        part_pose: PartPoseMsg
-
-        counter = 1
-        for part_pose in self._camera_image._part_poses:
+        output = '\n\n'
+        for i, part_pose in enumerate(image._part_poses):
+            part_pose: PartPoseMsg
+            output += '==========================\n'
             part_color = CompetitionInterface._part_colors[part_pose.part.color].capitalize()
             part_color_emoji = CompetitionInterface._part_colors_emoji[part_pose.part.color]
             part_type = CompetitionInterface._part_types[part_pose.part.type].capitalize()
-            output += f'Part {counter}: {part_color_emoji} {part_color} {part_type}\n'
-            output += '==========================\n'
+            output += f'Part {i+1}: {part_color_emoji} {part_color} {part_type}\n'
+            output += '--------------------------\n'
             output += 'Camera Frame\n'
-            output += '==========================\n'
-            position = f'x: {part_pose.pose.position.x}\n\t\ty: {part_pose.pose.position.y}\n\t\tz: {part_pose.pose.position.z}'
-            orientation = f'x: {part_pose.pose.orientation.x}\n\t\ty: {part_pose.pose.orientation.y}\n\t\tz: {part_pose.pose.orientation.z}\n\t\tw: {part_pose.pose.orientation.w}'
+            output += '--------------------------\n'
+            
+            output += '  Position:\n'
+            output += f'    x: {part_pose.pose.position.x:.3f} (m)\n'
+            output += f'    y: {part_pose.pose.position.y:.3f} (m)\n'
+            output += f'    z: {part_pose.pose.position.z:.3f} (m)\n'
 
-            output += '\tPosition:\n'
-            output += f'\t\t{position}\n'
-            output += '\tOrientation:\n'
-            output += f'\t\t{orientation}\n'
-            output += '==========================\n'
+            roll, pitch, yaw = rpy_from_quaternion(part_pose.pose.orientation)
+            output += '  Orientation:\n'
+            output += f'    roll: {rad_to_deg_str(roll)}\n'
+            output += f'    pitch: {rad_to_deg_str(pitch)}\n'
+            output += f'    yaw: {rad_to_deg_str(yaw)}\n'
+            
+            part_world_pose = multiply_pose(image._sensor_pose, part_pose.pose)
+            output += '--------------------------\n'
             output += 'World Frame\n'
-            output += '==========================\n'
-            part_world_pose = multiply_pose(sensor_pose, part_pose.pose)
-            position = f'x: {part_world_pose.position.x}\n\t\ty: {part_world_pose.position.y}\n\t\tz: {part_world_pose.position.z}'
-            orientation = f'x: {part_world_pose.orientation.x}\n\t\ty: {part_world_pose.orientation.y}\n\t\tz: {part_world_pose.orientation.z}\n\t\tw: {part_world_pose.orientation.w}'
+            output += '--------------------------\n'
 
-            output += '\tPosition:\n'
-            output += f'\t\t{position}\n'
-            output += '\tOrientation:\n'
-            output += f'\t\t{orientation}\n'
-            output += '==========================\n'
+            output += '  Position:\n'
+            output += f'    x: {part_world_pose.position.x:.3f} (m)\n'
+            output += f'    y: {part_world_pose.position.y:.3f} (m)\n'
+            output += f'    z: {part_world_pose.position.z:.3f} (m)\n'
 
-            counter += 1
+            roll, pitch, yaw = rpy_from_quaternion(part_world_pose.orientation)
+            output += '  Orientation:\n'
+            output += f'    roll: {rad_to_deg_str(roll)}\n'
+            output += f'    pitch: {rad_to_deg_str(pitch)}\n'
+            output += f'    yaw: {rad_to_deg_str(yaw)}\n'
+
+            output += '==========================\n\n'
 
         return output
-
+    
     def _parse_kitting_task(self, kitting_task: KittingTask):
         '''
         Parses a KittingTask object and returns a string representation.
-
         Args:
             kitting_task (KittingTask): KittingTask object to parse
-
         Returns:
             str: String representation of the KittingTask object
         '''
@@ -358,10 +372,8 @@ class CompetitionInterface(Node):
     def _parse_assembly_task(self, assembly_task: AssemblyTask):
         '''
         Parses an AssemblyTask object and returns a string representation.
-
         Args:
             assembly_task (AssemblyTask): AssemblyTask object to parse
-
         Returns:
             str: String representation of the AssemblyTask object
         '''
@@ -380,27 +392,32 @@ class CompetitionInterface(Node):
             part_color = CompetitionInterface._part_colors[product.part.color].capitalize()
             part_color_emoji = CompetitionInterface._part_colors_emoji[product.part.color]
             part_type = CompetitionInterface._part_types[product.part.type].capitalize()
-            assembled_pose_position = product.assembled_pose.pose.position
-            assembled_pose_orientation = product.assembled_pose.pose.orientation
-            install_direction = product.install_direction
-            position = f'x: {assembled_pose_position.x}\n\t\ty: {assembled_pose_position.y}\n\t\tz: {assembled_pose_position.z}'
-            orientation = f'x: {assembled_pose_orientation.x}\n\t\ty: {assembled_pose_orientation.y}\n\t\tz: {assembled_pose_orientation.z}\n\t\tw: {assembled_pose_orientation.w}'
-            output += f'\tPart: {part_color_emoji} {part_color} {part_type}\n'
-            output += '\tPosition:\n'
-            output += f'\t\t{position}\n'
-            output += '\tOrientation:\n'
-            output += f'\t\t{orientation}\n'
-            output += f'\tInstall direction: [{install_direction.x}, {install_direction.y}, {install_direction.z}]\n\n'
+
+            output += f'Part: {part_color_emoji} {part_color} {part_type}\n'
+
+            output += '  Position:\n'
+            output += f'    x: {product.assembled_pose.pose.position.x:.3f} (m)\n'
+            output += f'    y: {product.assembled_pose.pose.position.y:.3f} (m)\n'
+            output += f'    z: {product.assembled_pose.pose.position.z:.3f} (m)\n'
+
+            roll, pitch, yaw = rpy_from_quaternion(product.assembled_pose.pose.orientation)
+            output += '  Orientation:\n'
+            output += f'    roll: {rad_to_deg_str(roll)}\n'
+            output += f'    pitch: {rad_to_deg_str(pitch)}\n'
+            output += f'    yaw: {rad_to_deg_str(yaw)}\n'
+
+            output += f'  Install direction:\n'
+            output += f'    x: {product.install_direction.x:.1f}\n'
+            output += f'    y: {product.install_direction.y:.1f}\n'
+            output += f'    z: {product.install_direction.z:.1f}\n'
 
         return output
 
     def _parse_combined_task(self, combined_task: CombinedTask):
         '''
         Parses a CombinedTask object and returns a string representation.
-
         Args:
             combined_task (CombinedTask): CombinedTask object to parse
-
         Returns:
             str: String representation of the CombinedTask object
         '''
@@ -416,26 +433,31 @@ class CompetitionInterface(Node):
             part_color = CompetitionInterface._part_colors[product.part.color].capitalize()
             part_color_emoji = CompetitionInterface._part_colors_emoji[product.part.color]
             part_type = CompetitionInterface._part_types[product.part.type].capitalize()
-            assembled_pose_position = product.assembled_pose.pose.position
-            assembled_pose_orientation = product.assembled_pose.pose.orientation
-            install_direction = product.install_direction
-            position = f'x: {assembled_pose_position.x}\n\t\ty: {assembled_pose_position.y}\n\t\tz: {assembled_pose_position.z}'
-            orientation = f'x: {assembled_pose_orientation.x}\n\t\ty: {assembled_pose_orientation.y}\n\t\tz: {assembled_pose_orientation.z}\n\t\tw: {assembled_pose_orientation.w}'
-            output += f'\tPart: {part_color_emoji} {part_color} {part_type}\n'
-            output += '\tPosition:\n'
-            output += f'\t\t{position}\n'
-            output += '\tOrientation:\n'
-            output += f'\t\t{orientation}\n'
-            output += f'\tInstall direction: [{install_direction.x}, {install_direction.y}, {install_direction.z}]\n\n'
+
+            output += f'Part: {part_color_emoji} {part_color} {part_type}\n'
+
+            output += '  Position:\n'
+            output += f'    x: {product.assembled_pose.pose.position.x:.3f} (m)\n'
+            output += f'    y: {product.assembled_pose.pose.position.y:.3f} (m)\n'
+            output += f'    z: {product.assembled_pose.pose.position.z:.3f} (m)\n'
+
+            roll, pitch, yaw = rpy_from_quaternion(product.assembled_pose.pose.orientation)
+            output += '  Orientation:\n'
+            output += f'    roll: {rad_to_deg_str(roll)}\n'
+            output += f'    pitch: {rad_to_deg_str(pitch)}\n'
+            output += f'    yaw: {rad_to_deg_str(yaw)}\n'
+
+            output += f'  Install direction:\n'
+            output += f'    x: {product.install_direction.x:.1f}\n'
+            output += f'    y: {product.install_direction.y:.1f}\n'
+            output += f'    z: {product.install_direction.z:.1f}\n'
 
         return output
 
     def _parse_order(self, order: Order):
         '''Parse an order message and return a string representation.
-
         Args:
             order (Order) -- Order message
-
         Returns:
             String representation of the order message
         '''
@@ -456,10 +478,8 @@ class CompetitionInterface(Node):
     def lock_agv_tray(self, num):
         '''
         Lock the tray of an AGV and parts on the tray. This will prevent tray and parts from moving during transport.
-
         Args:
             num (int):  AGV number
-
         Raises:
             KeyboardInterrupt: Exception raised when the user presses Ctrl+C
         '''
@@ -490,11 +510,9 @@ class CompetitionInterface(Node):
     def move_agv_to_station(self, num, station):
         '''
         Move an AGV to an assembly station.
-
         Args:
             num (int): AGV number
             station (int): Assembly station number
-
         Raises:
             KeyboardInterrupt: Exception raised when the user presses Ctrl+C
         '''
@@ -526,9 +544,7 @@ class CompetitionInterface(Node):
         if future.result().success:
             self.get_logger().info(f'Moved AGV{num} to {self._stations[station]}')
         else:
-            self.get_logger().warn(future.result().message)
-
-    
+            self.get_logger().warn(future.result().message)  
 
     def set_floor_robot_gripper_state(self, state):
         '''Set the gripper state of the floor robot.
