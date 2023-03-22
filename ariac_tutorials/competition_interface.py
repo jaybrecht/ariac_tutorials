@@ -12,8 +12,8 @@ from ariac_msgs.msg import (
     PartPose as PartPoseMsg,
     Order as OrderMsg,
     AssemblyPart as AssemblyPartMsg,
-    AssemblyTask as AssemblyTaskMsg,
     AGVStatus as AGVStatusMsg,
+    AssemblyTask as AssemblyTaskMsg,
     VacuumGripperState,
 )
 
@@ -81,14 +81,6 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for converting Part type constants to strings'''
 
-    _stations = {
-        AssemblyTaskMsg.AS1: "assembly station 1",
-        AssemblyTaskMsg.AS2: "assembly station 2",
-        AssemblyTaskMsg.AS3: "assembly station 3",
-        AssemblyTaskMsg.AS4: "assembly station 4",
-    }
-    '''Dictionary for converting AssemblyTask constants to strings'''
-
     _destinations = {
         AGVStatusMsg.KITTING: 'kitting station',
         AGVStatusMsg.ASSEMBLY_FRONT: 'front assembly station',
@@ -96,6 +88,14 @@ class CompetitionInterface(Node):
         AGVStatusMsg.WAREHOUSE: 'warehouse',
     }
     '''Dictionary for converting AGVDestination constants to strings'''
+
+    _stations = {
+        AssemblyTaskMsg.AS1: 'assembly station 1',
+        AssemblyTaskMsg.AS2: 'assembly station 2',
+        AssemblyTaskMsg.AS3: 'assembly station 3',
+        AssemblyTaskMsg.AS4: 'assembly station 4',
+    }
+    '''Dictionary for converting AssemblyTask constants to strings'''
     
     _gripper_states = {
         True: 'enabled',
@@ -372,8 +372,10 @@ class CompetitionInterface(Node):
     def _parse_assembly_task(self, assembly_task: AssemblyTask):
         '''
         Parses an AssemblyTask object and returns a string representation.
+
         Args:
             assembly_task (AssemblyTask): AssemblyTask object to parse
+
         Returns:
             str: String representation of the AssemblyTask object
         '''
@@ -383,7 +385,7 @@ class CompetitionInterface(Node):
             output += f'AGV: {assembly_task.agv_number[0]}\n'
         elif len(assembly_task.agv_numbers) == 2:
             output += f'AGV(s): [{assembly_task.agv_numbers[0]}, {assembly_task.agv_numbers[1]}]\n'
-        output += f'Assembly station: {self._destinations[assembly_task.station].title()}\n'
+        output += f'Station: {self._stations[assembly_task.station].title()}\n'
         output += 'Products:\n'
         output += '==========================\n'
 
@@ -416,15 +418,17 @@ class CompetitionInterface(Node):
     def _parse_combined_task(self, combined_task: CombinedTask):
         '''
         Parses a CombinedTask object and returns a string representation.
+
         Args:
             combined_task (CombinedTask): CombinedTask object to parse
+
         Returns:
             str: String representation of the CombinedTask object
         '''
 
         output = 'Type: Combined\n'
         output += '==========================\n'
-        output += f'Assembly station: {self._destinations[combined_task.station].title()}\n'
+        output += f'Station: {self._stations[combined_task.station].title()}\n'
         output += 'Products:\n'
         output += '==========================\n'
 
