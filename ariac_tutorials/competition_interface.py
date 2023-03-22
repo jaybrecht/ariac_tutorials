@@ -358,9 +358,9 @@ class CompetitionInterface(Node):
         output += '==========================\n'
 
         quadrants = {1: "Quadrant 1: -",
-                    2: "Quadrant 2: -",
-                    3: "Quadrant 3: -",
-                    4: "Quadrant 4: -"}
+                     2: "Quadrant 2: -",
+                     3: "Quadrant 3: -",
+                     4: "Quadrant 4: -"}
 
         for i in range(1, 5):
             product: KittingPart
