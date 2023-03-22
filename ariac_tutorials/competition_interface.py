@@ -65,11 +65,11 @@ class CompetitionInterface(Node):
     '''Dictionary for converting Part color constants to strings'''
 
     _part_colors_emoji = {
-        PartMsg.RED: '�',
-        PartMsg.BLUE: '�',
-        PartMsg.GREEN: '�',
-        PartMsg.ORANGE: '�',
-        PartMsg.PURPLE: '�',
+        PartMsg.RED: '🟥',
+        PartMsg.BLUE: '🟦',
+        PartMsg.GREEN: '🟩',
+        PartMsg.ORANGE: '🟧',
+        PartMsg.PURPLE: '🟪',
     }
     '''Dictionary for converting Part color constants to emojis'''
 
