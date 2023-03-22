@@ -11,8 +11,9 @@ from ariac_msgs.msg import (
     PartPose as PartPoseMsg,
     Order as OrderMsg,
     AssemblyPart as AssemblyPartMsg,
+    AGVStatus as AGVStatusMsg,
     AssemblyTask as AssemblyTaskMsg,
-    AGVStatus as AGVStatusMsg)
+)
 
 from ariac_msgs.srv import (
     MoveAGV)
@@ -85,10 +86,10 @@ class CompetitionInterface(Node):
     '''Dictionary for converting AGVDestination constants to strings'''
 
     _stations = {
-        AssemblyTaskMsg.AS1: "assembly station 1",
-        AssemblyTaskMsg.AS2: "assembly station 2",
-        AssemblyTaskMsg.AS3: "assembly station 3",
-        AssemblyTaskMsg.AS4: "assembly station 4",
+        AssemblyTaskMsg.AS1: 'assembly station 1',
+        AssemblyTaskMsg.AS2: 'assembly station 2',
+        AssemblyTaskMsg.AS3: 'assembly station 3',
+        AssemblyTaskMsg.AS4: 'assembly station 4',
     }
     '''Dictionary for converting AssemblyTask constants to strings'''
 
