@@ -12,8 +12,8 @@ from ariac_msgs.msg import (
     PartPose as PartPoseMsg,
     Order as OrderMsg,
     AssemblyPart as AssemblyPartMsg,
-    AssemblyTask as AssemblyTaskMsg,
     AGVStatus as AGVStatusMsg,
+    AssemblyTask as AssemblyTaskMsg,
     VacuumGripperState,
 )
 
@@ -65,11 +65,11 @@ class CompetitionInterface(Node):
     '''Dictionary for converting Part color constants to strings'''
 
     _part_colors_emoji = {
-        PartMsg.RED: '🟥',
-        PartMsg.BLUE: '🟦',
-        PartMsg.GREEN: '🟩',
-        PartMsg.ORANGE: '🟧',
-        PartMsg.PURPLE: '🟪',
+        PartMsg.RED: '�',
+        PartMsg.BLUE: '�',
+        PartMsg.GREEN: '�',
+        PartMsg.ORANGE: '�',
+        PartMsg.PURPLE: '�',
     }
     '''Dictionary for converting Part color constants to emojis'''
 
@@ -81,14 +81,6 @@ class CompetitionInterface(Node):
     }
     '''Dictionary for converting Part type constants to strings'''
 
-    _stations = {
-        AssemblyTaskMsg.AS1: "assembly station 1",
-        AssemblyTaskMsg.AS2: "assembly station 2",
-        AssemblyTaskMsg.AS3: "assembly station 3",
-        AssemblyTaskMsg.AS4: "assembly station 4",
-    }
-    '''Dictionary for converting AssemblyTask constants to strings'''
-
     _destinations = {
         AGVStatusMsg.KITTING: 'kitting station',
         AGVStatusMsg.ASSEMBLY_FRONT: 'front assembly station',
@@ -96,6 +88,14 @@ class CompetitionInterface(Node):
         AGVStatusMsg.WAREHOUSE: 'warehouse',
     }
     '''Dictionary for converting AGVDestination constants to strings'''
+
+    _stations = {
+        AssemblyTaskMsg.AS1: 'assembly station 1',
+        AssemblyTaskMsg.AS2: 'assembly station 2',
+        AssemblyTaskMsg.AS3: 'assembly station 3',
+        AssemblyTaskMsg.AS4: 'assembly station 4',
+    }
+    '''Dictionary for converting AssemblyTask constants to strings'''
     
     _gripper_states = {
         True: 'enabled',
@@ -177,7 +177,7 @@ class CompetitionInterface(Node):
 
         # Attribute to store the current state of the floor robot gripper
         self._floor_robot_gripper_state = VacuumGripperState()
-        
+
         # Service client for moving the floor robot to the home position
         self._move_floor_robot_home = self.create_client(
             Trigger, '/competitor/move_floor_robot_home')
@@ -358,9 +358,9 @@ class CompetitionInterface(Node):
         output += '==========================\n'
 
         quadrants = {1: "Quadrant 1: -",
-                     2: "Quadrant 2: -",
-                     3: "Quadrant 3: -",
-                     4: "Quadrant 4: -"}
+                    2: "Quadrant 2: -",
+                    3: "Quadrant 3: -",
+                    4: "Quadrant 4: -"}
 
         for i in range(1, 5):
             product: KittingPart
@@ -380,8 +380,10 @@ class CompetitionInterface(Node):
     def _parse_assembly_task(self, assembly_task: AssemblyTask):
         '''
         Parses an AssemblyTask object and returns a string representation.
+
         Args:
             assembly_task (AssemblyTask): AssemblyTask object to parse
+
         Returns:
             str: String representation of the AssemblyTask object
         '''
@@ -391,7 +393,7 @@ class CompetitionInterface(Node):
             output += f'AGV: {assembly_task.agv_number[0]}\n'
         elif len(assembly_task.agv_numbers) == 2:
             output += f'AGV(s): [{assembly_task.agv_numbers[0]}, {assembly_task.agv_numbers[1]}]\n'
-        output += f'Assembly station: {self._destinations[assembly_task.station].title()}\n'
+        output += f'Station: {self._stations[assembly_task.station].title()}\n'
         output += 'Products:\n'
         output += '==========================\n'
 
@@ -424,15 +426,17 @@ class CompetitionInterface(Node):
     def _parse_combined_task(self, combined_task: CombinedTask):
         '''
         Parses a CombinedTask object and returns a string representation.
+
         Args:
             combined_task (CombinedTask): CombinedTask object to parse
+
         Returns:
             str: String representation of the CombinedTask object
         '''
 
         output = 'Type: Combined\n'
         output += '==========================\n'
-        output += f'Assembly station: {self._destinations[combined_task.station].title()}\n'
+        output += f'Station: {self._stations[combined_task.station].title()}\n'
         output += 'Products:\n'
         output += '==========================\n'
 
@@ -598,7 +602,7 @@ class CompetitionInterface(Node):
                 rclpy.spin_once(self)
             except KeyboardInterrupt as kb_error:
                 raise KeyboardInterrupt from kb_error
-            
+        
     def move_robot_home(self, robot_name):
         '''Move one of the robots to its home position.
 
