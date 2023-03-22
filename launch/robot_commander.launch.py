@@ -8,11 +8,7 @@ from ariac_moveit_config.parameters import generate_parameters
 
 
 def generate_launch_description():
-    '''generate_launch_description _summary_
 
-    Returns:
-        _description_
-    '''
     # Robot Commander Node
     robot_commander = Node(
         package="ariac_tutorials",

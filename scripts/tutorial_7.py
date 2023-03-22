@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 '''
-To test this script, run the following command:
+To test this script, run the following commands in separate terminals:
 
-- ros2 launch ariac_gazebo ariac.launch.py competitor_pkg:=ariac_tutorials trial_name:=tutorials
 - ros2 launch ariac_tutorials robot_commander.launch.py
 - ros2 run ariac_tutorials move_robots.py
+- ros2 launch ariac_gazebo ariac.launch.py trial_name:=tutorial competitor_pkg:=ariac_tutorials
 '''
 
 import rclpy
