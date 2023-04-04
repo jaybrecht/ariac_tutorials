@@ -31,6 +31,7 @@ install(PROGRAMS
   scripts/tutorial_5.py
   scripts/tutorial_6.py
   scripts/tutorial_7.py
+  scripts/tutorial_8.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
